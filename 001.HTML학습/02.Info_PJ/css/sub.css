@@ -65,22 +65,23 @@ h2.sub-title{
     html 파일이 아닌 css파일 위치에서 상대경로를 잡아야 이미지가 나온다 */
 
 }
+/* 정치 */
 .politics {
     background-image: url(../images/titbg1.jpg);
 }
-
+/* 경제 */
 .economics {
     background-image: url(../images/titbg2.jpg);
 }
-
+/* 사회 */
 .social {
     background-image: url(../images/titbg3.jpg);
 }
-
+/* IT */
 .it {
     background-image: url(../images/titbg4.jpg);
 }
-
+/* 연예 */
 .tv {
     background-image: url(../images/titbg5.jpg);
 }

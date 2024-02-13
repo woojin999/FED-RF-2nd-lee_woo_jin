@@ -9,7 +9,78 @@
     html의 랜더링 속도가 향상된다!
 */
 
-.sub-title{
-    font-size: 50px;
-    color: red;
+
+/* 서브페이지 타이틀 */
+h2.sub-title{
+   /* 글자색 : c */
+   color: #1ac504;
+   /* color: rgba(26, 197, 4, 0.87); */
+
+   /* 글자크기:font-size: (fz); */
+   font-size: 38px;
+
+   /* 글자두께:font-weight: (fw); */
+   font-weight: normal;
+    /* 글자체:font-family
+    z콤마로 구분된 글자체는 대체체임
+    앞의 글자체가 없으면 뒤의 글자체가 적용됨. 만약 모두 없으면 브라우저 기본체가 적용됨 */
+
+   /* font-family: '맑은 고딕', '궁서'; */
+   font-family: 'Bagel Fat One', system-ui;
+
+   /* 텍스트 정렬- text-align:center  tac(중앙정렬) */
+   text-align: center;
+
+   /* text-shadow */
+   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+
+   /* 박스 테두리 - border: 두께 종류 색상 (bd)
+        -두께: 선두께
+        -종류: 선종류(solid실선,dotted점선,dashed대쉬선 등)
+        -색상: 테두리 색상
+   */
+   border: 2px solid darkviolet;
+   /* 둥근모서리 - border-radius(brad) */
+   border-radius: 20px;
+
+   /* 패딩 */
+   padding: 20px;
+
+   /* 배경색  */
+   background-color: white;
+
+   /* 배경이미지 */
+    /* background-image: url(../images/titbg4.jpg); */
+
+    /* 배경반복여부 */
+    background-repeat: no-repeat;
+    /* 배경고정*/
+
+    /* 배경위치 */
+    background-position: center center;
+    /* 배경크기 
+    cover 는 박스를 빈틈없이 비율유지하여 채움 */
+    background-size: cover;
+    /* 외부 CSS에서 이미지 경로 주의
+    html 파일이 아닌 css파일 위치에서 상대경로를 잡아야 이미지가 나온다 */
+
+}
+.politics {
+    background-image: url(../images/titbg1.jpg);
+}
+
+.economics {
+    background-image: url(../images/titbg2.jpg);
+}
+
+.social {
+    background-image: url(../images/titbg3.jpg);
+}
+
+.it {
+    background-image: url(../images/titbg4.jpg);
+}
+
+.tv {
+    background-image: url(../images/titbg5.jpg);
 }

@@ -1,12 +1,13 @@
 /* Info PJ 공통 CSS - common.css */
 
 /* 웹폰트 구글CDN(Content Delivery Network) */
-@import url("https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Diphylleia&family=Orbit&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Bagel+Fat+One&family=Diphylleia&family=Orbit&display=swap");
 
 /* 
         font-family: 'Bagel Fat One', system-ui;
         font-family: 'Diphylleia', serif;
         font-family: 'Orbit', sans-serif;
+        font-family: "Noto Sans KR", sans-serif;
     */
 /* CSS코딩구역 */
 /* 

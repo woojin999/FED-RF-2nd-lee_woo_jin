@@ -1,18 +1,30 @@
 @charset "utf-8";
 /* 인트로 사이트 메인 CSS - main.css */
 
-html,
-body {
+/* 스크롤 애니메이션 셋팅 */
+html{
+  scroll-behavior: smooth;
+  /* html 즉,Root에 부드러운 스크롤 설정을 하면 이동시 스크롤 애니메이션이 연출된다 */
+}
+
+html,body,h1,h2,h3,p{
   margin: 0;
   padding: 0;
+
+}
+
+html,
+body,.page {
+  /* 높이값 보이는 화면 기준 채우기 */
   height: 100%;
 }
 body {
   background-image: linear-gradient(
-    to bottom,
+    to bottom, 
     rgb(104, 255, 247),
     rgb(219, 245, 188)
-  );
+  ) ;
+
   /* 
                 [선형 그라데이션]
             backgorund-image 
@@ -20,11 +32,26 @@ body {
             to top, to left, to right, to bottom
             */
 }
-.wrap {
+
+/* 메뉴박스 */
+.menu{
+  width: 700px;
+  margin: 0 auto;
+  background-color: rgba(135, 206, 250, 0.705);
+  padding: 15px;
+}
+
+/* 메뉴 하위 h1,h2 옆으로 흐르게 display변경하기 */
+.menu>*{
+  display: inline-block;
+}
+
+.link-box {
   border: 2px dashed darkblue;
   border-radius: 20px;
   width: 600px;
-  margin: 0 auto;
+  /* height: 100px; */
+  margin: 0  auto;
   padding: 20px;
   text-align: center;
 }

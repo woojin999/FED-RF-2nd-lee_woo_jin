@@ -309,3 +309,89 @@ h2.sub-title{
     box-shadow: 0px 0px 10px 5px #888;
     /* x y blur spread color */
 }
+
+/* 오늘의 작품 & 느낌 */
+
+.work {
+    /* 글자 크기, 글자 정렬은 자식요소로 상속된다 */
+    text-align: center;
+    /* 그라데이션 
+        [ 선형 그라데이션 : linear-gradient]
+        linear-gradient(방향, 색1, 색2, ...);
+        linear-gradient(방향, 색1, 몇%, 색2, 몇% ...);
+        linear-gradient(각도, 색1, 몇%, 색2, 몇%...);
+        -옵션 : 
+        1. 방향: to top, to bottom, to left, to right
+        2. 각도: 각도deg
+        3. 콤마로 나열된 색상 뒤에 %수치를 쓰면 비율조정가능
+    */
+/*     background-image: 
+    linear-gradient(to right, #8dc1f1 10%, #ffbaba 60% , #96ff96); */
+    background-image: 
+    linear-gradient(46deg, #f7a559 5%, #89d5f8 60% , #ff9283);
+
+    /* background-color: pink; */
+
+    /* 패딩 */
+    padding: 20px;
+    /* 
+        부모박스에 패딩이 없는 상태에서 첫번째 자식 블록박스의 마진은 부모 바깥쪽으로 나가서 세팅 된다
+        이유는 마진은 바깥쪽으로 셋팅하는 개념이고 무조가 이를 셋팅하지 않았다면 첫번째 블록박스에서 마진을 셋팅할 수 있도록 기본 설계되어 있다
+        -> 패딩을 주는 순간 자식의 마진은 패딩의 내부 공간을 밀게된다
+    */
+    border: 5px dotted blue;
+
+    /* 배경관련 표시 영역지정 : background-clip
+        background-clip: border-box;
+        값 : border-box 보더 영역까지표시(기본값)
+        값 : padding-box 패딩 영역까지표시
+        값 : content-box 내용 영역까지표시
+     */
+    background-clip: border-box;
+
+    /* 배경색 관련 영역지정 : background-origin
+        값 : border-box 보더 영역부터 표시
+        값 : padding-box 패딩 영역부터 표시(기본값)
+        값 : content-box 내용 영역부터 표시
+    */
+    background-origin: padding-box;
+
+    /* 배경 반복 제거 */
+    background-repeat: no-repeat;
+
+    /* 박스 내부 그림자 */
+    box-shadow: inset 0 0 10px #333;
+}
+
+.work h4{
+    /* 작품 타이틀 */
+    font-family: "Black And White Picture", system-ui;
+    font-weight: normal;
+    font-size: 28px;
+    color: #333;
+
+    margin: 0;
+    /* q부모에 패딩 없는 상태에서 첫번쩌 자식마진은 부모밖으로 나감
+    참고) 마지막 자식블록요소도 부모 박스 하단 마진은 바깥으로 나감
+    */
+    
+}
+
+figure img{
+    border: 12px ridge goldenrod;
+}
+
+/* 작품명 */
+.work figcaption{
+    font-family: "Gugi", sans-serif;
+    font-size: 20px;
+    margin-top: 20px;
+    
+}
+
+/* 작품명 인용구 */
+
+.work cite{
+    font-style: normal;
+    color: #bb5b02;
+}

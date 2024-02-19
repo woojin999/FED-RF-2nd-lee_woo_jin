@@ -20,13 +20,14 @@ html,body,.page{
 }
 
 body{
-   /*  background: 
-    url(../images/worksbg.jpg) no-repeat fixed center/cover; */
-      background-image: linear-gradient(
+     background: 
+    url(../images/Puff-Clouds.jpg) no-repeat fixed center/cover; 
+    
+/*       background-image: linear-gradient(
     to bottom, 
     rgb(104, 255, 247),
     rgb(219, 245, 188)
-  ) ;
+  ) ; */
 
     /* background-image: 
     linear-gradient(to bottom,rgb(205, 255, 227),rgb(247, 206, 255)); */

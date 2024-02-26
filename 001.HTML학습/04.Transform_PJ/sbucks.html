@@ -1,13 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>스타벅스 응용</title>
-        <style>
+<head>
+    <meta charset="UTF-8" />
+    <title>스타벅스 응용</title>
+    <style>
+        body{
+            background: #000 url(./starbucks_img/reserve_bg.jpg) no-repeat fixed center/100%;
+        }
+
+        #trans10{
+            position: absolute;
+            /* 중앙이동하기
+            1. clac()로 계산하기 
+            2. transform으로 ㅇ ㅣ동하기*/
             
-        </style>
-    </head>
-    <body>
+            /********************************************** 
+                    [ absolut / fixed 포지션에서 정중앙 ]
+
+                    1. calc로 계산하기 : 박스크기의 절반빼기
+                        (1) top: calc(50% - 높이값/2)
+                        (2) left: calc(50% - 가로값/2)
+
+                    2. transform으로 중앙이동하기
+                        (1) top: 50% / left: 50%
+                        (2) transform: translate(-50%,-50%)
+
+                **********************************************/
+
+            /* 아래 3가지 셋팅 transform 정중앙이동 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 334px;
+            height: 334px;
+            
+        }
+        #trans10 img{
+            position: absolute;
+            
+        }
         
-    </body>
+        #trans10 img:first-child{
+            transform: rotateY(90deg);
+            transition: .4s ease-in;
+            /* 처음에만 천천히 */
+            
+        }
+        #trans10:hover img:first-child{
+            transform: rotateY(0deg);
+            transition: .4s ease-out .4s;
+            /* 오버시 0.4s 기다린후 0.4초 애니 나중에만 천천히 */
+        }
+        #trans10 img:last-child{
+            transform: rotateY(0deg);
+            transition: .4s ease-out .4s;
+            /* 오버시 바로 0.4초 애니 나중에만 천천히 */
+        }
+        #trans10:hover img:last-child{
+            transform: rotateY(90deg);
+            transition: .4s ease-in;
+            /* 오버시 바로 0.4초 애니 이때 처음에만 천천히 */
+        }
+    </style>
+</head>
+<body>
+    <div id="trans10">
+            <img src="./starbucks_img/reserve_medal02.png" alt="설명이미지" />
+            <img src="./starbucks_img/reserve_medal01.png" alt="별이미지" />
+    </div>
+</body>
 </html>

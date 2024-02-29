@@ -19,6 +19,10 @@ html,body,h1,h2,h3,ul,ol{
     margin: 0;
     padding: 0;
 }
+/* html 루트 설정 */
+html{
+    font-size: 10px;
+}
 /* 전체 배경이미지 */
 body{
     background: url(../images/bg.jpg) no-repeat fixed top/cover;
@@ -37,11 +41,30 @@ body *{
     background: url(../images/metal02.jpg) no-repeat center/cover;
 }
 /************************************* 1.상단영역 *************************************/
+h1.logo{
+    position: fixed;
+    top: calc(50% - 10vw);
+    left: calc(50% - 10vw);
+    z-index: 999;
+    width: 20vw;
+    height: 20vw;
+    border-radius: 50%;
+    background: pink url(../images/robot_03.png) no-repeat center/auto 100%;
+    box-shadow: inset 0 0 20px 5px #000, 0 0 20px 5px aquamarine;
 
+    /* 글자설정 */
+    text-align: center;
+    line-height: 20vw;
+    font-size: 5vw;
+    font-family: 'Orbitron';
+    color: lightgreen;
+    text-shadow: 0 0 10px #000;
+}
 /************************************* 2.메인영역 *************************************/
 /* 2-1.로봇박스 */
 .robot-box{
     padding-top: 200px;
+    margin-bottom: 560px;
 }
 /* 2-1-1.로봇머리 */
 .head{
@@ -142,8 +165,8 @@ body *{
     margin: 0 auto;
     margin-top: 50px ;
     /* 배경이미지 조정 */
-    background-repeat: repeat;
-    background-size: 50%;
+    /* background-repeat: repeat; */
+    background-size: 80%;
 }
 /* 몸통 가상요소로 상의 만들기 */
 .body::before{
@@ -155,7 +178,7 @@ body *{
     width: 110%;
     height: 55%;
     background-image: linear-gradient(to bottom, #b5deff,#008cff);
-    border-radius: 10px;
+    border-radius: 10px 10px 30% 30%;
 }
 /* 몸통 가상요소로 하의 만들기 */
 .body::after{
@@ -167,7 +190,7 @@ body *{
     width: 110%;
     height: 35%;
     background-image: linear-gradient(to bottom, #f9baff,#ff00f2);
-    border-radius: 10px;
+    border-radius: 10px 10px 30% 30%;
 }
 /* 목 */
 .neck{
@@ -405,4 +428,104 @@ body *{
     width: 196px;
     height: 102px;
 }
+
+/* 2-2.로봇설명박스 */
+.text-box{
+    max-width: 800px;
+    margin: 0 auto;
+    color: #fff;
+    padding: 15px 30px;
+    background-color: #00000071;
+    border-radius: 20px;
+    /* 박스 내부그림자 */
+    box-shadow: inset 0 0 20px blue,inset 0 0 50px 10px cyan;
+
+    /* [백드롭 필터효과]
+    -filter속성과 동일한 셋팅을 가지며 적용대상이 겹쳐지는 하단의 그래픽을 변경
+    <filter-function> 값 
+    backdrop-filter: blur(2px); -> 흐림
+    backdrop-filter: brightness(60%); -> 밝기
+    backdrop-filter: contrast(40%); -> 대비
+    backdrop-filter: drop-shadow(4px 4px 10px blue); -> 그림자
+    backdrop-filter: grayscale(30%); -> 흑백
+    backdrop-filter: hue-rotate(120deg); -> 색상변경
+    backdrop-filter: invert(70%); -> 반전색
+    backdrop-filter: opacity(20%); ->투명도
+    backdrop-filter: sepia(90%); -> 세피아효과
+    backdrop-filter: saturate(80%); -> 채도
+     */
+
+/* 다중 필터 */
+/* backdrop-filter: blur(4px) saturate(150%); */
+    backdrop-filter: blur(4px);
+
+    
+}
+
+/* 2-2-1.제목 */
+.text-box h2{
+    position: sticky;
+    top: 10px;
+    /* 글자크기 35px -> em단위 */
+    font-size: 3.5rem;
+    text-align: center;
+    background-color: #ffffff79;
+    color: darkblue;
+    text-shadow: 2px 2px 2px #0000009d;
+    border-radius: 20px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: normal;
+}
+/* 2-2-2.출처 */
+.text-box small{
+    display: block;
+    font-size: 1.2rem;  
+    text-align: center;
+    padding: 12px;
+    color: chartreuse;
+    text-shadow: 1px 1px 1px #0000009d;
+    font-family: 'Chakra Petch', sans-serif;
+}
+/* 2-2-3.내용단락 */
+.text-box p{
+    font-size: 1.7rem;
+    font-family: 'Barlow';
+    /* 줄간격 */
+    line-height: 1.5;
+    /* 자간 */
+    letter-spacing: 1px;
+    /* 단어간격 */
+    word-spacing: 1px;
+
+    /* [다단설정]
+    
+        - 다중열속성
+        -> column-count : 다중열개수
+        -> column-rule : 다중열구분선
+        -> column-gap : 다중열사이간격
+
+     */
+     /* 다단수 셋팅 */
+     column-count: 3;
+     /* 사이구분선은 border와 유사 */
+     column-rule: 5px dotted lightgreen;
+     /* column-rule: 두께 종류 색; */
+    /* 사이간격 */
+    column-gap: 55px;
+
+    /* 양쪽정렬 */
+    text-align: justify;
+    /* 영문자는 단어를 깨야함 */
+    word-break: break-all;
+ 
+    /* 첫줄 들여쓰기 :text-indent: (ti) */
+    text-indent: 40px;
+}
+/* 가상요소 첫글자 변경 */
+.text-box p::first-letter{
+    font-size: 3rem;
+    color: rgb(236, 96, 96);
+    font-weight: bold;
+}
+
 /************************************* 3.하단영역 *************************************/

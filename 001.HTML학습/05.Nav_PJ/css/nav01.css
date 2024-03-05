@@ -120,6 +120,7 @@ ul::after,ol::after,.clb::after{
 /* 하위메뉴 a요소 오버시 조정 */
 .gnb ul>li .smenu li a{
     opacity: .7;
+    transition: .3s;
 }
 
 /* 하위메뉴 오버시 */
@@ -150,6 +151,32 @@ ul::after,ol::after,.clb::after{
 }
 .gnb ul>li:hover .smenu li:nth-child(5){
     transition-delay: .5s;
+}
+
+/* GNB 상위메뉴 오버시 밑줄애니 */
+.gnb ul>li>a{
+    /* 가상요소 밑줄을 위한 부모자격 */
+    position: relative;
+}
+.gnb ul>li>a::after{
+    content: '';
+    position: absolute;
+    /* 앱솔루트는 자동블록됨 */
+    top: 55px;
+    /* 마우스 나갈때 left값 밀기 */
+    left: 100%;
+    width: 0;
+    height: 2px;
+    background-color: lime;
+    /* 트랜지션 */
+    transition: .3s;
+}
+/* 오버시 밑줄박스 애니 */
+.gnb ul>li:hover>a::after{
+    left: 0;
+    width: 100%;
+    /* 오버시 트랜지션 >> left는 트랜지션 적용말것 */
+    transition: width .3s;
 }
 
 /* 메인영역 */

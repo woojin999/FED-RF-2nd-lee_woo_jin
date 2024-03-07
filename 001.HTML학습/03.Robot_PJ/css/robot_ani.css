@@ -152,26 +152,107 @@
 }
 
 /* .leg{
-    animation: leg-ani 1s ease-in 4s 4;
+    animation: leg-ani 2s ease-in 4s 4 alternate;
 } */
+/* 로봇다리작동애니 */
 .leg1{
-    animation: leg-ani 1s ease-in 4.4s 3;
+    animation: leg-ani .4s ease-in 4.4s 8 alternate;
 }
 .leg2{
-    animation: leg-ani2 1s ease-in 4s 3;
+    animation: leg-ani2 .4s ease-in 4s 8 alternate;
 }
 
-/* 로봇다리작동애니 */
 @keyframes leg-ani {
-
-    to{
-        top: 80%;
-        height: 140px;
-    }
-}
+     to{
+         top: 80%;
+         height: 160px;
+     }
+ }
+ 
 @keyframes leg-ani2 {
     to{
         top: 80%;
-        height: 140px;
+        height: 160px;
+    }
+}
+
+/* 팔공통 트랜스폼 세로축 기준 top으로 변경 */
+.arm,.arm span,.arm1 span::after {
+    transform-origin: top;
+    
+}
+/* 4.로봇 왼쪽팔 허리에 올리기 */
+.arm1{
+    animation: left-arm-ani1 .4s 8s forwards;
+}
+@keyframes left-arm-ani1 {
+    to{
+        transform: rotate(35deg);
+    }
+}
+.arm1 span{
+    animation: left-arm-ani2 .4s 8s forwards;
+}
+@keyframes left-arm-ani2 {
+    to{
+        transform: rotate(-100deg);
+    }
+}
+
+.arm1 span::after {
+    animation: left-arm-ani3 .4s 8s forwards;
+}
+
+@keyframes left-arm-ani3 {
+    to{
+        transform: rotate(70deg);
+    }
+}
+
+/* 5.로봇 오른쪽팔 허리에 올리기 */
+.arm2{
+    animation: 
+    /* 팔 올리기 */
+    right-arm-ani1 .4s 9s forwards,
+    /* 팔 흔들기 : 팔올린다음(지연9.4초) */
+    right-arm-ani2 .4s ease-in-out infinite 9.4s alternate;
+}
+/* 팔 올리기 */
+@keyframes right-arm-ani1 {
+    to{
+        transform: rotate(-150deg);
+    }
+}
+/* 팔 흔들기 */
+@keyframes right-arm-ani2 {
+    to{
+        transform: rotate(-140deg);
+    }
+}
+/* 오른손 팔꿈치 살짝 움직이기 */
+.arm2 span{
+    animation: right-arm-ani3 0.4s ease-in-out 9.8s infinite alternate;
+}
+@keyframes right-arm-ani3 {
+    to{
+        transform: rotate(-25deg);
+    }
+}
+.arm2 span::after{
+    animation: right-arm-ani4 0.2s ease-in-out 9s forwards;
+}
+@keyframes right-arm-ani4 {
+    to{
+        transform: rotateY(180deg);
+        left: -13px;
+    }
+}
+/* 말풍선 나타가지 애니 */
+.link-title{
+    animation: link-title 2s ease-in 9s forwards;
+}
+@keyframes link-title{
+    to{
+        transform: translateX(200px) scale(1);
     }
 }

@@ -575,6 +575,10 @@
             console.log("변경전 영화객체", wjObj);
 
             switch (btnTxt) {
+              case '우진초이스':
+                // 객체의 내용을 덮어쓰기로 변경
+               wjObj = myObj;
+                break;
               case '민지초이스':
                 // 객체의 내용을 덮어쓰기로 변경
                wjObj = mjObj;
@@ -612,7 +616,7 @@
                 break;
 
               case '지현초이스':
-               wjObj = jjObj;
+               wjObj = jjob;
                 break;
 
               case '수진초이스':
@@ -635,6 +639,19 @@
 
             //변경데이터 확인 후 바로 위박스 영화정보 업데이트 함수를 호출
             showMovieInfo();
+            // JS클래스 내장객체: classList
+            // add() / remove() 메서드 사용
+
+            // 버튼에 클래스 on 모두 빼기
+            for (let i = 0; i < cntBtn; i++) {
+             choiceBtn[i].classList.remove('on');
+            } /// for문 ///
+            // 클릭된 버튼에 클래스 on 넣기
+            // 클릭된 버튼 자신은 this
+            this.classList.add('on');
+            
+
+
           }; //// click 이벤트 함수 //////
         } ///////////for문/////////////
       } //// loadFn 함수 ////

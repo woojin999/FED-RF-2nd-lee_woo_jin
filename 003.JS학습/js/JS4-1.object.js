@@ -1,5 +1,26 @@
 // 나의 영화 초이스 객체 JS
 
+// 우진의 오브젝트 -> 변경가능하게 let으로 선언한다
+let myObj = {};
+// 오브젝트 형만 만들고 객체내용은 아래에서
+
+// 1. 영화제목
+myObj.title = "밀수";
+// 2.감독
+myObj.director = "류승완";
+// 3. 배우
+myObj.actor = "김혜수,조인성";
+// 4. 장르
+myObj.genre = "범죄";
+// 5. 관람가
+myObj.ratings = "15세";
+// 6. 예고편
+myObj.trailer = function () {
+  console.log("예고편:Yh7J-HhXZjw");
+  // 예고편 플레이 함수호출
+  playMovie("Yh7J-HhXZjw");
+}; ///// trailer 메서드 ////////////
+
 // 탐쌤의 오브젝트!
 // -> 변경가능하게 let으로 선언한다!
 let tomObj = {};
@@ -81,7 +102,7 @@ dyObj.actor = "안소니 곤잘레스, 가엘 가르시아 베르날";
 // 4. 장르
 dyObj.genre = "애니메이션, 모험, 코미디";
 //5. 관람가
-dyObj.rating = "전체관람가";
+dyObj.ratings = "전체관람가";
 // 6. 예고편
 dyObj.trailer = function () {
   console.log("예고편:영화아이디");
@@ -102,7 +123,7 @@ jaeObj.actor = "마동석,손석구";
 // 4. 장르
 jaeObj.genre = "범죄";
 // 5. 관람가
-jaeObj.rating = "19세";
+jaeObj.ratings = "19세";
 // 6. 예고편
 jaeObj.trailer = function () {
   console.log("예고편:영화아이디");
@@ -167,7 +188,7 @@ yjObj.director = "장재현";
 // 3. 배우
 yjObj.actor = "최민식,김고은,유해진,이도현";
 // 4. 장르
-yjObj.genre = "미스터리", "스릴러", "오컬트";
+(yjObj.genre = "미스터리"), "스릴러", "오컬트";
 // 5. 관람가
 yjObj.ratings = "15세";
 // 6. 예고편
@@ -207,10 +228,10 @@ let jjob = {};
 //1. 영화제목
 jjob.title = "7광구";
 //2. 감독
-jjob.drector = "김지훈";
+jjob.director = "김지훈";
 //3. 배우
 jjob.actor = "하지원,안성기";
-jjob.ganre = "SF";
+jjob.genre = "SF";
 jjob.ratings = "15세";
 jjob.trailer = function () {
   console.log("예고편:영화아이디");

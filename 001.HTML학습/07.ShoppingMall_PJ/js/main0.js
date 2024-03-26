@@ -41,16 +41,17 @@ addEvt(window, "DOMContentLoaded", loadFn);
 function loadFn() {
   console.log("로딩완료!");
 
-  
-
+  // [대상선정]
   // 이동버튼 대상: .abtn
   const abtn = qsa(".abtn");
   // 변경대상 : #slide
   const slide = qs("#slide");
-  // console.log(abtn,slide);
+  // 블릿대상:
+  const indic = document.querySelectorAll('.indic li');
+  console.log(abtn,slide,indic);
 
-    // 왼쪽 버튼 처음에 숨기기
-    abtn[0].style.display="none";
+  // 왼쪽 버튼 처음에 숨기기
+  abtn[0].style.display = "none";
 
   // 슬라이드 순번 전역변수
   let snum = 0;
@@ -96,40 +97,46 @@ function loadFn() {
         }else{
             snum--;
         } */
-    
+
     // 3. 한계값 설정하기
     // 3-1. 오른쪽 버튼일 경우 0보다 작으면 숨기기
-    if (snum<0) {
-        // snum은 0으로고정
-        snum = 0;
-       
-    } else if(snum>4){
+    if (snum < 0) {
+      // snum은 0으로고정
+      snum = 0;
+    } else if (snum > 4) {
       // snum은 0으로고정
       snum = 4;
-      
-      
-    //   qs('.ab1').style.display = 'block';
-    }// else if//////
+
+      //   qs('.ab1').style.display = 'block';
+    } // else if//////
 
     // 4. 마지막 구역에서 버튼 숨기기
 
-    if(snum === 0 || snum === 4) {
+    if (snum === 0 || snum === 4) {
       // 해당 버튼 숨기기
       this.style.display = "none";
-    }else{
-        // 버튼 다시 보이기 
-        for(let x of abtn){
-
+    } else {
+      // 버튼 다시 보이기
+      for (let x of abtn) {
         x.style.display = "block";
-        }
+      }
     } //// else /////
-
-
-
 
     console.log("이동%", -100 * snum + "%");
     slide.style.left = -100 * snum + "%";
     slide.style.transition = ".6s ease-in-out";
+
+    // 5.블릿표시 구현가ㅣ
+    // 5-1. 모든 클래스 on지우기
+    // 5-2. 현재 순번 클래스 넣기
+    indic.forEach((ele,idx)=>{
+      // ele - 각각의 li, idx 각각의 순번
+      if (idx == snum) { // 현재순번 on 넣기
+        ele.classList.add('on');
+      }else{ // 나머지는 on빼기
+        ele.classList.remove('on');
+      }
+    }); // forEach
   } ////////////// goSlide함수 /////////////////
 } //////////////// loadFn 함수 ///////////////
 /////////////////////////////////////////////

@@ -23,10 +23,10 @@ let pgNum = 0;
 // 1-2. 휠상태변수 (true는 막기/false는 통과)
 let stsWheel = false;
 // 1-3. .page클래스 요소
-const elePage = document.querySelectorAll('.page');
+const elePage = document.querySelectorAll(".page");
 // 1-4. 전체페이지수
 const totalCnt = elePage.length;
-console.log('대상',elePage,totalCnt,'개');
+console.log("대상", elePage, totalCnt, "개");
 
 // 2. 이벤트 연결함수 //////
 
@@ -44,7 +44,7 @@ console.log('대상',elePage,totalCnt,'개');
 // 대상: window
 // 전체 페이지 스크롤 이벤트의 대상은 window다
 // 휠이벤트 설정
-window.addEventListener("wheel", wheelFn,{passive:false});
+window.addEventListener("wheel", wheelFn, { passive: false });
 /* 
         [ window / document / body 세가지는 기본막기불가 설정되어 있다 ]
         -> 이벤트 등록시 패시브모드가 true로 설정됨
@@ -58,7 +58,7 @@ window.addEventListener("wheel", wheelFn,{passive:false});
 // [ 새로고침시 스크롤바 위치 인덱싱이 되므로 맨위로 강제 이동하기설정 ]
 // scrollTo(x축이동,y축이동)
 setTimeout(() => {
-    window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }, 300);
 
 /*************************************** 
@@ -74,79 +74,113 @@ function wheelFn(e) {
   // -> passive:false설정해야함 window라서
 
   // 2. 광힐금지장치
-    if (stsWheel) 
-        return;
-        stsWheel = true; // 잠금
-    setTimeout(() => {
-        stsWheel = false; // 잠금해제
-    }, 500);
+  if (stsWheel) return;
+  stsWheel = true; // 잠금
+  setTimeout(() => {
+    stsWheel = false; // 잠금해제
+  }, 500);
 
-
-  // 3. 휠방향 알아내기 // 
+  // 3. 휠방향 알아내기 //
   let delta = e.wheelDelta;
   // 휠델타는 이벤트 객체에서 리턴해주는 방향,이동거리 등의 정보값이다
-  console.log('델타값:', delta);
+  console.log("델타값:", delta);
   // -> 마이너스가 아랫방향
   // 4. 방향별 분기하기
 
-  if (delta<0) {
+  if (delta < 0) {
     // 아랫페이지로 가야하니까 페이지번호 증가
     pgNum++;
     // 한계수체크(끝번호고정)
     if (pgNum == totalCnt) {
-        pgNum = totalCnt-1; 
-        // 마지막페이지순번은 전체개수 -1
-    }/// if//
-  }else{
+      pgNum = totalCnt - 1;
+      // 마지막페이지순번은 전체개수 -1
+    } /// if//
+  } else {
     // 반대는 윗방향이니까 페이지 번호 감소
     pgNum--;
     if (pgNum < 0) {
-        pgNum = 0;
+      pgNum = 0;
     } // if //
   }
-  console.log('pgNum:',pgNum);
+  console.log("pgNum:", pgNum);
 
   // 5. 페이지 이동하기 //
   // 이동할 위치알아내기
   // -> .page 요소중 해당 순번페이지위치
   let pos = elePage[pgNum].offsetTop;
   // offsetTop 은 최상단에서부터 거리
-  console.log('이동할 위치 ',pos);
+  console.log("이동할 위치 ", pos);
 
   //5-2. 페이지 스크롤 위치 이동하기
   // scrollTo(0, y축이동값)
-  window.scrollTo(0,pos);
+  window.scrollTo(0, pos);
 
-  // 6 전체메뉴에 on빼기
+  // 6. 해당메뉴 순번 on넣기 / 나머지 on 빼기
+  chgMenu(pgNum);
+
+/*   // 6 전체메뉴에 on빼기
   for (let x of gnb) {
     x.parentElement.classList.remove("on");
   }
   // 7.해당순번에 on넣기
-  gnb[pgNum].parentElement.classList.add("on");
-// gnb[pgNum]은 해당순번의 메뉴a 요소다
+  gnb[pgNum].parentElement.classList.add("on"); */
 
+
+  // gnb[pgNum]은 해당순번의 메뉴a 요소다
 } /////////// wheelFn 함수 ////////////////
 ///////////////////////////////////////////
 
 /*************************************************** 
 메뉴 클릭시 이벤트 처리하기
  ***************************************************/
-// 이벤트 대상 : .gnb a 
-const gnb = document.querySelectorAll('.gnb a');
-console.log('gnb:',gnb);
+// 이벤트 대상 : .gnb a
+const gnb = document.querySelectorAll(".gnb a");
+// 이벤트 대상 : .indic a
+const indic = document.querySelectorAll(".indic a");
+console.log("gnb:", gnb, "/indic", indic);
+
 // 이벤트 설정하기 + 기능구현하기
-gnb.forEach((ele,idx)=>{
-    ele.onclick = () =>{
-        // 클릭시 자신의 순번찍기
-        console.log('순번',idx);
-        // 1.전역페이지변수에 순번 업데이트
-        pgNum = idx;
-        // 2.전체 메뉴에 on빼기
-        for (let x of gnb) {
-            x.parentElement.classList.remove('on');
-        }
-        // 3.해당순번에 on넣기
-        ele.parentElement.classList.add('on');
-        // parentElement 은 선택요소의 부모
-    }; // click 함수 //
+gnb.forEach((ele, idx) => {
+  ele.onclick = () => {
+    // 메뉴 변경함수 호출
+    chgMenu(idx);
+  }; // click 함수 //
 }); // forEach///////
+
+indic.forEach((ele, idx) => {
+  ele.onclick = () => {
+    // 메뉴 변경함수 호출
+    chgMenu(idx);
+  }; // click 함수 //
+}); // forEach///////
+
+// [ 메뉴 변경함수: .gnb + .indic]////
+
+
+function chgMenu(idx) { // idx 순번
+
+  // 클릭시 자신의 순번찍기
+  console.log("순번", idx);
+  // 1.전역페이지변수에 순번 업데이트
+  pgNum = idx;
+  // 2.전체 메뉴에 on빼기
+
+  gnb.forEach((ele,seq)=>{
+    // ele - 요소 / seq - 순번
+    if (idx == seq) {
+      ele.parentElement.classList.add("on");
+      indic[seq].parentElement.classList.add("on");
+    }else{ // 기타의 경우 on지우기
+      ele.parentElement.classList.remove("on");
+      indic[seq].parentElement.classList.remove("on");
+    } // ifelse
+  }); // forEach //
+
+/*   for (let x of gnb) {
+    x.parentElement.classList.remove("on");
+  }
+ */  // 3.해당순번에 on넣기
+  // ele.parentElement.classList.add("on");
+  // parentElement 은 선택요소의 부모
+
+} ///////////chgMenu /////////////////

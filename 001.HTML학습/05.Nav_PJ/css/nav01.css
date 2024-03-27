@@ -175,9 +175,9 @@ ul::after,ol::after,.clb::after{
 .gnb ul>li:hover>a::after{
     left: 0;
     width: 100%;
-    /* 오버시 트랜지션 >> left는 트랜지션 적용말것 */
     transition: width .3s;
 }
+/* 오버시 트랜지션 >> left는 트랜지션 적용말것 */
 
 /* 메인영역 */
 .main-area {

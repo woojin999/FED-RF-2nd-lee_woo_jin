@@ -9,24 +9,15 @@
     font-family: 'Cute Font', cursive;
     font-family: 'Jua', sans-serif;
 */
-
-/* 마진초기화 */
-html,body,h1,h2,ul,ol{
-    margin: 0;
-    padding: 0;
-}
-/* 리스트 초기화 */
-ul,ol{
-    list-style: none;
-}
-
+/* 리셋CSS 불러오기 */
+@import url(./reset.css);
 body{
     background-color: #000;
 }
 
 /* 공사중 표시 */
 body *{
-    outline: 2px dashed yellow;
+    /* outline: 2px dashed yellow; */
     /* outline: 두 종 색; */
 }
 
@@ -40,6 +31,8 @@ body *{
 
 /**************** 1. 상단영역 ****************/
 .top-area{
+    position: relative;
+    /* 부모자격 - .gnb */
     height: 80px;
     background: url(../images/curtain.jpg) repeat-x;    
 }
@@ -50,7 +43,148 @@ body *{
     color: aquamarine;
     line-height: 80px;
     text-align: center;
+    text-shadow: 0 0 4px aquamarine;
+    /* 애니메이션 */
+    animation: tit-ani .5s ease-in infinite alternate;
 }
+
+/* 타이틀 애니 키프레임 */
+@keyframes tit-ani {
+    to{
+        text-shadow: 0 0 12px aquamarine;
+    }
+}
+/* 1-2. GNB메뉴 */
+.gnb{
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    z-index: 999;
+}
+.gnb ul{
+    /* 플렉스박스 */
+    display: flex;
+    gap: 0 1.5rem;
+    font-family: 'Jua', sans-serif;
+    font-size: 2rem;
+}
+/* 상위 li */
+.gnb>ul>li{
+    position: relative;
+    /* 부모자격 - .smenu */
+    padding-bottom: 10px;
+    /* 하위메뉴와 연결되게함 */
+}
+/* 서브메뉴 */
+.smenu {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    /* outline: 2px solid yellow; */
+    /* box-shadow: 0 0 5px #fff; */
+    /* 모든 외곽선에 그림자(글로우)효과를 주려면 filter드랍쉐도우를 사용함 */
+    filter: drop-shadow( 0 0 5px #fff);
+    border-radius: 5px;
+    font-size: 1.8rem;
+    line-height: 1.6;
+    padding: 3px;
+    background: url(../images/bg_smenu.png) no-repeat center/cover;
+    /* 처음에 안보임 */
+    display: none;
+}
+/* 상위메뉴 오버시 서브보이기 */
+.gnb ul>li:hover .smenu{
+display: block;
+}
+/* 가상요소로 삼각형 만들기 */
+.smenu::before{
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 15px;
+    background-color: #2a2a2a;
+    /* 클립패스로 자르기 */
+    clip-path: polygon(0 100%,50% 0,100% 100%);
+}
+/* 서브메뉴 ol  */
+.smenu ol{
+    border: 1px solid #ccc;
+    padding: 10px;
+    white-space: nowrap;
+}
+/* 사이구분선 클래스 */
+.bd-top{
+    border-top: 1px solid #ccc;
+}
+/* 서브메뉴 오버시 글자색 */
+.smenu li:hover a{
+    color: red;
+    
+}
+/* 서브메뉴 오버시 아이콘 */
+.smenu li:hover a::after{
+    content: '🎧';
+    /* 오른쪽 끝에 위치 */
+    float: right;
+}
+.smenu li:nth-child(2):hover a::after{
+    content: '🎩';
+}
+.gnb ul> li .smenu li:nth-child(3):hover a::after{
+    content: '📀';
+}
+.gnb ul > li .smenu li:nth-child(4):hover a::after{
+    content: '📹';
+}
+/* 영사기 박스 */
+.cam{
+    position: absolute;
+    top: -10px;
+    right: -65px;
+}
+.cam img{
+    width: 50px;
+    transform: rotate(30deg);
+    /* 트랜지션 */
+    transition: .3s .3s;
+}
+.gnb:hover .cam img{
+   transition: .3s;
+    transform: rotate(0deg);
+}
+
+.gnb:hover .beam{
+    width: 270px;
+    transition: width .3s .3s;
+    animation: beam-ani .01s linear infinite alternate;
+}
+
+/* 빔 떨림 애니 */
+@keyframes beam-ani {
+    to{
+        opacity: .3;
+    }
+}
+/* 빔박스 */
+.beam{
+    position: absolute;
+    top: -38px;
+    right: 10px;
+    width: 0;
+    height: 110px;
+    /* outline: 2px dashed yellow; */
+    background: url(../images/bim.png) no-repeat right/auto 100%
+    ,url(../images/screen.gif) no-repeat -50% center/auto 75%;
+    /* 메뉴,카메라보다 아래 */
+    z-index: -1;
+    transition: .3s;
+}
+
 /**************** 2. 메인영역 ****************/
 .main-area{
     position: relative;

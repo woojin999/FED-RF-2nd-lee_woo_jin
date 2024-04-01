@@ -190,7 +190,7 @@ display: block;
 .cam::after{
     content: '';
     position: absolute;
-    width: 270px;
+    width: 0px; /* 오버시 270px */
     height: 110px;
     top: -38px;
     right: 10px;
@@ -203,6 +203,7 @@ display: block;
 /* 오버시 스크린 보이기 */
 .gnb:hover .cam::after{
     opacity: 1;
+    width: 270px;
     transition: opacity .3s .6s;
 }
 

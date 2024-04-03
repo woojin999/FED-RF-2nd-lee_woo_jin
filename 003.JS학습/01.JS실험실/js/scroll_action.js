@@ -227,7 +227,18 @@ myFn.addEvt(window,'scroll',moveWoman);
 function moveWoman() {
   // 1. 스크롤 위치값
   let scTop = window.scrollY;
-  console.log("스위",scTop);
 
+  // 2. 떨녀 top 값
+  let wTop = winH * scTop / scLlimit;
+  console.log('스위:',scTop,'\n여자:',wTop);
+
+  // 이미지 이동값 = 윈도우 높이(winH) * 스크롤 이동값(scTop) / 스크롤한계값(scLimit)
+  // 3. 떨녀에게 적용하기
+  woman.style.top = wTop + 'px';
+
+  // 4. 맨위일때 윗쪽으로 숨기기
+  if (scTop == 0) {
+    woman.style.top = '-20%';
+  }
 
 } // moveWoman ////

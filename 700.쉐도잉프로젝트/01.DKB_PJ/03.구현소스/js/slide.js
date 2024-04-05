@@ -101,7 +101,7 @@ export default function slideFn() {
     }; */
 
     /* snum++;
-    console.log("이동%", -100 * snum + "%");
+    // console.log("이동%", -100 * snum + "%");
     slide.style.left =(-100*snum)+ "%";
     slide.style.transition = '.6s ease-in-out' */
 
@@ -124,7 +124,7 @@ export default function slideFn() {
       // -> ES6문법에서 전달변수 초기값 주기 문법생김
 
       // 함수를 호출시에 아무값도 보내지 않으면 함수의 전달변수 하나를 쓸 경우 또는 여러전달변수중 첫번째 변수는 이벤트 객체가 전달된다
-      console.log("전달변수하나", evt, sts);
+      // console.log("전달변수하나", evt, sts);
 
       // 만약 버튼 클릭일 경우 인터발 지우기 함수 호출
       if (sts) {
@@ -151,7 +151,7 @@ export default function slideFn() {
       // 해당 클래스가 있으면 true, 없으면 false
 
       // 함수호출확인
-      console.log("슬라이드", this, isRbtn);
+      // console.log("슬라이드", this, isRbtn);
       // this는 호출한 버튼 자신
 
       // 2. 버튼별 분기하기 ///
@@ -219,7 +219,7 @@ export default function slideFn() {
       let seq = slide
         .querySelectorAll("li")
         [isRbtn ? 1 : 0].getAttribute("data-seq");
-      console.log("블릿이 읽어올 순번:", seq, "데이터형:", typeof seq);
+      // console.log("블릿이 읽어올 순번:", seq, "데이터형:", typeof seq);
       indic.forEach((ele, idx) => {
         // ele - 각각의 li, idx 각각의 순번
         if (idx == seq) {
@@ -259,7 +259,7 @@ export default function slideFn() {
     // [ 인터발 지우기함수 ]//
     function clearAuto() {
       // 1.지우기 확인
-      console.log("인터발 지움");
+      // // console.log("인터발 지움");
 
       // 2. 인터발 지우기
       clearInterval(autoI);

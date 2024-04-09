@@ -17,7 +17,7 @@ import * as txtData from "./text_data.js";
 // 불러온 값확인
 // console.log(myFn, mTit, sTitle, personInfo, mvData);
 // console.log(myFn, mTit, sTit, pInfo, mdt);
-console.log(txtData.mTitle, txtData.sTitle, txtData.personInfo, txtData.mvData);
+console.log(txtData.mTitle, txtData.sTitle, txtData.personInfo, txtData.mvData, txtData.myFunc('개발자'));
 
 // export default 로 내보낸 단일 함수 불러오기
 // import makeMessage from './msg_format.js';

@@ -3,6 +3,23 @@
 // 나의 함수 호출
 import mFn from "./my_function.js";
 
+/******************************************** 
+    [ 여기 등장하는 배열 메서드 정리 ]
+    1. push(값) - 뒷배열추가!
+    2. pop() - 뒷배열삭제!
+    3. unshift(값) - 앞배열추가!
+    4. shift() - 앞배열삭제!
+    5. splice(순번,0,값) - 중간배열삽입!
+    6. splice(순번,개수) - 중간배열삭제!
+    _________________________________
+
+    7. join(구분자) - 배열값 구분자로 문자열변환!
+    8. map(v=>`<새값>${v}</새값>`) - 새배열!(배열리턴)
+    9. forEach(v=>{}) - 배열/유사배열 순회!
+    10. Object.keys(객체) - 객체의 키로 배열변환!
+    11. Object.values(객체) - 객체의 값으로 배열변환!
+********************************************/
+
 // 0. 기본정보 셋팅 //////////////////
 // (1) 배열변수 선언과 할당
 const fruit = ["배", "사과", "용과", "딸기"];
@@ -49,9 +66,16 @@ const delNum = mFn.qs("#delnum");
 // 3. 초기화 작업 : 처음배열 출력 / 콤보박스 바인딩
 
 // 3-1. 처음 배열 출력
-showit.innerText = fruit.join("♥");
+// fruit 배열 변경시 다시 출력햐여 하므로 함수로 만들기
+const showArray = ()=>{
+    showit.innerText = fruit.join("♥");
+    // 배열.join(구분자) : 배열값 사이에 구분자를 넣은 문자열값 변환
+}; // showArray 함수
 
-// 배열.join(구분자) : 배열값 사이에 구분자를 넣은 문자열값 변환
+// 처음배열출력함수 최초호출은 아랫쪽에서
+showArray();
+
+
 
 // 3-2 전체과일 콤보박스 바인딩
 // 대상: #sel -> sel변수
@@ -75,6 +99,8 @@ const arrFruits = Object.keys(frObj);
 // -> map 에 사용한 원본배열은 보존된다
 
 let newArr = arrFruits.map((v) => `<option>${v}</option>`);
+// 화살표 함수에서 중괄호를 사용하면 return할 경우
+// return 키워드를 써줘야함 따라서 중괄호 생략시 리턴키워드 자동생략 문법을 사용하면 간단히 표현 할 수 있음
 
 // console.log("map변환후 배열값:", newArr);
 
@@ -92,9 +118,14 @@ sel.innerHTML = newArr.join("");
 // 대상: #anum -> aNum변수
 // 데이터: fruit 배열
 // 갱신시 계속 재바인딩 되어야 함(함수화 필요)
-aNum.innerHTML = fruit
-  .map((v, i) => `<option value="${i}">${v}</option>`)
-  .join("");
+const bindCombo = () =>{
+    aNum.innerHTML = 
+    fruit.map((v, i) => `<option value="${i}">${v}</option>`).join("");
+}; // bind 함수 //
+
+// 콤보박스 데이터 바인딩 함수 최초호출
+
+bindCombo();
 
 // 4. 이벤트 설정하기 //
 mbtn.forEach((ele) => {
@@ -128,6 +159,72 @@ function showFruit() {
 
     // 출력박스에 태그넣기
     cont.innerHTML = hcode;
-
   } /// if //
+  // (2) '뒷배열추가요~!' 버튼 : push()
+  else if (btxt == "뒷배열추가요~!") {
+    // 대상: fruit 배열
+    // 읽어올곳 :sel 박스 -> 값은 value
+    fruit.push(sel.value);
+  } // else if
+  // (3) '앞배열추가요~!' 버튼 : unshift()
+  else if (btxt == "앞배열추가요~!") {
+    // 대상: fruit 배열
+    // 읽어올곳 :sel 박스 -> 값은 value
+    fruit.unshift(sel.value);
+  } // else if
+  //  (4) 뒷배열삭제요~! 버튼: pop()
+  else if (btxt == "뒷배열삭제요~!") {
+    // 대상: fruit 배열
+    fruit.pop();
+  } // else if
+  //  (5) 앞배열삭제요~! 버튼: shift()
+  else if (btxt == "앞배열삭제요~!") {
+    // 대상: fruit 배열
+    fruit.shift();
+  } // else if
+  //  (6) 중간배열삭제 버튼: splice()
+  // 삭제시 
+  // splice(순번) -> 해당순번부터 뒤를 모두삭제
+  // splice(순번,개수) -> 해당순번부터 해당개수만큼 삭제
+  else if (btxt == "중간배열삭제") {
+    // 지울 순번읽어오기 (대상:#anum)
+    let delSeq = aNum.value;
+    // 지울 개수 읽어오기 #delnum
+    let delCnt = delNum.value;
+    console.log('삭제할 시작 순번', delSeq)
+    
+    // isNaN(변수) ->숫자가 아니면 true, 맞으면 false
+    if (isNaN(delCnt)) {
+        delCnt =1;
+        delNum.value =1
+    }
+
+    // 대상: fruit 배열
+    fruit.splice(delSeq, delCnt );
+    // splice(지울순번, 지울개수)
+    // -> 지울개수 숫자가 아니니>? 응 1: 아니 delCnt
+  } // else if
+
+  // (7) 중간배열삽입 버튼 : splice()
+  // (삽입시)
+  // splice (순번,0, 넣을값,넣을값)
+  // -> 순번뒤에 전달값 0을 쓰고 그 뒤에 넣을값을 나열
+  // -> 결과: 선택순번 앞쪽에 배열값이 삽입됨
+  else if(btxt == '중간배열삽입') {
+    // 대상:fruit
+    fruit.splice(aNum.value,0,sel.value)
+    // fruit.splice(순번,0,넣을값)
+    console.log('넣을순번앞에 삽입:',aNum.value);
+  } ///// else if //
+
+
+  // 공통 실행ㄹ 코드구역
+  // 배열출력함수 호출
+  showArray();
+
+  // 콤보박스 바인딩 함수 호출
+  bindCombo();
+
+  // fruit 배열확인
+  console.log("fruit배열:", fruit);
 } // showFruit 함수

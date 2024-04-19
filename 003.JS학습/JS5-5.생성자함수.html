@@ -67,6 +67,7 @@
       // this의 의미는 인스턴스로 생성된 객체 자신을 의미
       // function MovieInfo(pos, tit, sum, dir, act, des) {
       function MovieInfo(minfo) {
+        console.log("th",this);
         // 속성 6가지 셋팅하기
         this.포스터 = minfo[0];
         this.제목 = minfo[1];

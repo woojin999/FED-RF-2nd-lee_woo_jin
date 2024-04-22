@@ -16,8 +16,11 @@ export default function setSlide(clsName) {
   banBox.forEach((ele) => {
     // 슬라이드 함수 호출하기
     // 하위 슬라이드 선택요소(드래그 대상요소인 슬라이드)
-    let subSlide = mFn.qsEl(ele, ".slide");
-    slideFn(ele, subSlide);
+    // let subSlide = mFn.qsEl(ele, ".slide");
+    // -> slideFn함수에서 하위 .slide를 수집하고 있음
+    // 따로 보낼필요 없음
+
+    slideFn(ele);
     // 실제 DOM요소를 보낸다!
   }); /////// forEach ///////////
 } //// setSlide 함수 /////
@@ -27,9 +30,8 @@ export default function setSlide(clsName) {
  기능: 로딩 후 버튼 이벤트 및 기능구현
   + 드래그 이동기능(goDrag 함수 합침)
  ******************************************/
-function slideFn(selEl, slider) {
+function slideFn(selEl) {
   // selEl 선택 슬라이드 부모 요소
-  // slider 드래그할 대상 슬라이드
   // console.log("슬라이드 함수 호출확인!");
 
   // 0.슬라이드 공통변수 /////
@@ -37,6 +39,9 @@ function slideFn(selEl, slider) {
   let clickSts = 0;
   // 0-2. 슬라이드 이동시간 : 상수로 설정
   const TIME_SLIDE = 400;
+  // 0-3. 슬라이드 기준위치값:
+  let originalValue = selEl.offsetWidth * -2.2;
+  //슬라이드 가로크기의 2.2배 음수값
 
   // 1. 대상선정
   // 1-1. 슬라이드 부모요소 : 전달된 선택요소 -> selEl
@@ -99,7 +104,7 @@ function slideFn(selEl, slider) {
     // 1. 오른쪽 버튼 여부 알아내기
     let isRight = this.classList.contains("ab2");
 
-    // 3. 버튼분기하기 '.ab2' 이면 오른쪽버튼
+    // 2. 버튼분기하기 '.ab2' 이면 오른쪽버튼
     if (isRight) {
       // 오른쪽버튼
       // 오른쪽에서 들어오는 슬라이드함수 호출!
@@ -110,12 +115,30 @@ function slideFn(selEl, slider) {
       leftSlide();
     } /////// else //////////////
 
-    // 4. 블릿순번 변경 함수 호출
+    // 3. 블릿순번 변경 함수 호출
     chgIndic(isRight); // 방향값을 보냄!
 
-    // 5. 자동넘김 멈춤함수 호출하기
-    // clearAuto();
+    // 4. 자동넘김 멈춤함수 호출하기
+    clearAuto();
+
+    // 중앙 li에 클래스 on 넣기
+    // slideSeq 값은 오른쪽버튼 2, 왼쪽버튼3
+
+    let slideSeq = isRight ? 3 : 2;
+
+    addOnSlide(3);
   } ////////// goSlide 함수 /////////
+
+  // 중앙 슬라이드 클래스 on처리 함수//
+  function addOnSlide(slideSeq) {
+    mFn.qsaEl(slide, "li").forEach((ele, idx) => {
+      if (idx == slideSeq) {
+        ele.classList.add("on");
+      } else {
+        ele.classList.remove("on");
+      }
+    }); /// forEach///
+  } // addOnSlide 함수 ///
 
   // 블릿순번 변경 함수 /////////////
   function chgIndic(isRight) {
@@ -151,7 +174,7 @@ function slideFn(selEl, slider) {
       // 3.맨앞li 맨뒤로 이동
       slide.appendChild(slide.querySelectorAll("li")[0]);
       // 4.slide left값 -220% -> 최종 left값은 px로
-      slide.style.left = selEl.offsetWidth*-2.2+"px";
+      slide.style.left = originalValue + "px";
       // 5.트랜지션 없애기
       slide.style.transition = "none";
     }, TIME_SLIDE);
@@ -182,7 +205,7 @@ function slideFn(selEl, slider) {
 
     setTimeout(() => {
       // 4. left값 -220%으로 들어오기 -> px값으로 변환
-      slide.style.left = selEl.offsetWidth * -2.2 + "px";
+      slide.style.left = originalValue + "px";
 
       // 5. 트랜지션주기
       slide.style.transition = TIME_SLIDE + "ms ease-out";
@@ -213,6 +236,9 @@ function slideFn(selEl, slider) {
       rightSlide();
       // 블릿변경함수호출(오른쪽은 1)
       chgIndic(1);
+      // 중앙슬라이드 클래스 on넣기 함수 호출
+      addOnSlide(3);
+      // -> 오른쪽버튼 왼쪽이동이므로 3를 보냄
 
       // // console.log('실행!');
       // 오른쪽버튼 클릭이벤트 강제발생!
@@ -222,7 +248,7 @@ function slideFn(selEl, slider) {
   } ///////// slideAuto 함수 //////////////
 
   // 인터발함수 최초호출!
-  // slideAuto();
+  slideAuto();
 
   // 버튼을 클릭할 경우를 구분하여 자동넘김을 멈춰준다!
   function clearAuto() {
@@ -247,7 +273,7 @@ function slideFn(selEl, slider) {
 
   // 드래그 적용 대상 및 이벤트 설정하기 //
   // 1. 대상선정 : 보내준 대상 HTML 컬렉션
-  const dtg = slider;
+  const dtg = slide; // -> slide는 선택박스 하위 슬라이드
   // const dtg = mFn.qs(".dtg2");
 
   // 드래그 대상의 css기본값을 셋팅한다
@@ -257,7 +283,7 @@ function slideFn(selEl, slider) {
   // 배너가 left값 -220% 기준박스에서 이동함
   // .banbx의 width값 곱하기 2.2
   // 기준위치값 변수에 할당
-  let leftVal = mFn.qs(".banbx").offsetWidth * -2.2;
+  let leftVal = originalValue;
   // 왼쪽으로 이동할 기준값(기준 위치값 * 1.1)
   let valFirst = leftVal * 1.1;
   // 오른쪽으로 이동할 기준값(기준위치값 * 0.9)
@@ -300,6 +326,8 @@ function slideFn(selEl, slider) {
     // e - 이벤트 객체 전달변수
     // 드래그 상태는 dragSts값이 true인 경우에만 혀용
     if (dragSts) {
+      // 0. 자동넘김 멈춤함수 호출하기
+      clearAuto();
       // // console.log("드래그중");
       // 1. 드래그 상태에서 움직일 때 포인터 위치값
       // - 브라우저용 포인터 위치는 pageX, pageY를 사용
@@ -352,10 +380,57 @@ function slideFn(selEl, slider) {
     // console.log("끝포인트:", lastX);
   }; //////lastPoint 함수 ////////
 
+  // (6) 슬라이드 드래그 이동구현
+  // -> (mouseup / touchend) 이벤트 발생시 호출함
+  const moveDragSlide = () => {
+    // 중앙 li순번 방향별 셋팅하기
+    let slideSeq = 2; // 왼쪽버튼(오른쪽이동)
+    // 만약 오른쪽버튼 왼쪽이동일 경우 순번은 3이 된다
+    // 업데이트는 오른쪽일 경우에만 해준다
+    // 기타일 경우는 세번째 순번인 2를 유지한다
+
+    // 대상의 left값 찍기(px단위를 parseInt()로 없애기)
+    let currentLeft = parseInt(dtg.style.left);
+    console.log("슬라이드left:", currentLeft, "X축순수이동값:", resultX);
+    // 대상 슬라이드 이동기준 분기하기
+    if (currentLeft < valFirst) {
+      console.log("왼쪽으로 이동");
+      // 오른쪽 버튼 클릭시 왼쪽 이동과 동일
+      rightSlide();
+      // on넣을 li 순번 업데이트
+      slideSeq = 3;
+    } else if (currentLeft > valSecond) {
+      console.log("오른쪽으로 이동");
+      // 슬라이드 이동함수 호출시 드래그시 이동된값이 계산된 -330%값을 보내준다
+      let resVal = selEl.offsetWidth * -3.3 + resultX;
+      leftSlide(resVal + "px");
+    } else {
+      // valFirst와 valSecond의 사이 범위
+      console.log("제자리 이동");
+      slide.style.left = "-220%";
+      slide.style.transition = ".3s ease-in-out";
+    }
+
+    // 드래그 시 더해지는 마지막 위치값 lastX를
+    // -220%의 left px 값으로 초기화해준다(숫자만)
+    lastX = originalValue;
+    // 이것을 해야 오작동 없음
+
+    // 중앙 li에 클래스 on 넣기
+    addOnSlide(slideSeq);
+
+    // 블릿변경함수호출 : 오른쪽이 3일때 true
+    chgIndic(slideSeq == 3 ? true : false);
+  }; /// moveDragSlide 함수 ///
+
+  ////////////////////////////////
   // 4. 드래그 이벤트 설정하기
 
   // (1) 마우스 다운 이벤트 함수연결하기
   mFn.addEvt(dtg, "mousedown", (e) => {
+    // 0. 자동넘김 멈춤함수 호출하기
+    clearAuto();
+
     // 드래그 상태값 true로 변경
     dTrue();
     // 첫번째 위치포인트 셋팅
@@ -370,38 +445,18 @@ function slideFn(selEl, slider) {
 
   // (2) 마우스 업 이벤트 함수연결하기
   mFn.addEvt(dtg, "mouseup", (e) => {
+    // 0. 자동넘김 멈춤함수 호출하기
+    clearAuto();
     // 드래그 상태값 false로 변경
     dFalse();
     // 마지막 위치포인트 셋팅
     lastPoint(e);
     dtg.style.cursor = "grab";
 
-    // 대상의 left값 찍기(px단위를 parseInt()로 없애기)
-    let currentLeft = parseInt(dtg.style.left);
-    console.log("슬라이드left:", currentLeft, "X축순수이동값:", resultX);
-    // 대상 슬라이드 이동기준 분기하기
-    if (currentLeft < valFirst) {
-      console.log("왼쪽으로 이동");
-      // 오른쪽 버튼 클릭시 왼쪽 이동과 동일
-      rightSlide();
-    } else if (currentLeft > valSecond) {
-      console.log("오른쪽으로 이동");
-      // 슬라이드 이동함수 호출시 드래그시 이동된값이 계산된 -330%값을 보내준다
-      let resVal = (selEl.offsetWidth * -3.3) + resultX;
-      leftSlide(resVal+'px');
-    } else {
-      // valFirst와 valSecond의 사이 범위
-      console.log("제자리 이동");
-      slide.style.left = "-220%";
-      slide.style.transition = ".3s ease-in-out";
-    }
+    // 드래그 슬라이드 이동함수 호출
+    moveDragSlide();
 
-    // 드래그 시 더해지는 마지막 위치값 lastX를
-    // -220%의 left px 값으로 초기화해준다(숫자만)
-    lastX = selEl.offsetWidth*-2.2;
-    // 이것을 해야 오작동 없음
-
-    // // console.log("업", lastX);
+    // console.log("업", lastX);
   }); ///// mouseup /////////
 
   // (3) 마우스 무브 이벤트 함수연결하기
@@ -424,6 +479,8 @@ function slideFn(selEl, slider) {
 
   // (1) 마우스 다운 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchstart", (e) => {
+    // 0. 자동넘김 멈춤함수 호출하기
+    clearAuto();
     // 드래그 상태값 true로 변경
     dTrue();
     // 첫번째 위치포인트 셋팅
@@ -437,14 +494,34 @@ function slideFn(selEl, slider) {
 
   // (2) 터치엔드 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchend", () => {
+    // 0. 자동넘김 멈춤함수 호출하기
+    clearAuto();
     // 드래그 상태값 false로 변경
     dFalse();
     // 마지막 위치포인트 셋팅
     lastPoint();
     // console.log("터치엔드", dragSts);
+
+    // 드래그 슬라이드 이동함수 호출
+    moveDragSlide();
   }); ///// touchend /////////
 
   // (3) 마우스 무브 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchmove", dMove); // touchmove //
+
+  // 브라우저 크기 리사이즈시 동적 변경값 업데이트함수
+  mFn.addEvt(window, "resize", () => {
+    // 1. 기준위치값 left 업데이트
+    originalValue = selEl.offsetWidth * -2.2;
+    // 2. 기준위치값으로 실제 슬라이드 css left값 변경하기
+    slide.style.left = originalValue + "px";
+    // 3. 초기 left값 셋팅
+    leftVal = originalValue;
+    // 4. 왼쪽으로 이동할 기준값(기준 위치값 * 1.1)
+    valFirst = leftVal * 1.1;
+    // 5. 오른쪽으로 이동할 기준값(기준위치값 * 0.9)
+    valSecond = leftVal * 0.9;
+    console.log("리사이즈 작동", originalValue, leftVal, valFirst, valSecond);
+  }); /// resize함수 ///
 } ///////////////////// slideFn 함수 ////////
 //////////////////////////////////////////

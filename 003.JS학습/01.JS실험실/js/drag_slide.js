@@ -15,61 +15,21 @@ export default function setSlide(clsName) {
   // 슬라이드 만큼 모두 호출하기!
   banBox.forEach((ele) => {
     // 슬라이드 함수 호출하기
-    slideFn(ele);
-    // 실제 DOM요소를 보낸다!
-
-    // [2] 드래그 요소 선택하여 셋팅하기
-    // 들어온 이름 "banbx" 하위 "slide" 클래스를 선택한다
-    // 하위 슬라이드 선택요소
+    // 하위 슬라이드 선택요소(드래그 대상요소인 슬라이드)
     let subSlide = mFn.qsEl(ele, ".slide");
-    // 슬라이드 함수 드래그 호출하기
-    goDrag(subSlide);
-    // console.log(subSlide);
+    slideFn(ele, subSlide);
+    // 실제 DOM요소를 보낸다!
   }); /////// forEach ///////////
 } //// setSlide 함수 /////
-
-/***************************************************** 
-    [ 슬라이드 이동 기능정의 ]
-    1. 이벤트 종류: click
-    2. 이벤트 대상: 이동버튼(.abtn)
-    3. 변경 대상: 슬라이드 박스(.slide)
-    4. 기능 설계:
-
-        (1) 오른쪽 버튼 클릭시 다음 슬라이드가
-            나타나도록 슬라이드 박스의 left값을
-            -100%로 변경시킨다.
-            -> 슬라이드 이동후!!! 
-            바깥에 나가있는 첫번째 슬라이드
-            li를 잘라서 맨뒤로 보낸다!
-            동시에 left값을 0으로 변경한다!
-
-        (2) 왼쪽버튼 클릭시 이전 슬라이드가
-            나타나도록 하기위해 우선 맨뒤 li를
-            맨앞으로 이동하고 동시에 left값을
-            -100%로 변경한다.
-            그 후 left값을 0으로 애니메이션하여
-            슬라이드가 왼쪽에서 들어온다.
-
-        (3) 공통기능: 슬라이드 위치표시 블릿
-            - 블릿 대상: .indic li
-            - 변경 내용: 슬라이드 순번과 같은 순번의
-            li에 클래스 "on"주기(나머진 빼기->초기화!)
-
-*****************************************************/
-
-/* 
-(참고: JS에서 이름짓는 일반규칙)
-1. 변수/함수 : 캐믈케이스(첫단어소문자 뒷단어 대문자시작)
-2. 생성자함수/클래스 : 파스칼케이스(모든첫글자 대문자)
-3. 상수 : 모든글자 대문자(연결은 언더스코어-스네이크 케이스)
-*/
 
 /****************************************** 
  함수명: slideFn
  기능: 로딩 후 버튼 이벤트 및 기능구현
+  + 드래그 이동기능(goDrag 함수 합침)
  ******************************************/
-function slideFn(selEl) {
+function slideFn(selEl, slider) {
   // selEl 선택 슬라이드 부모 요소
+  // slider 드래그할 대상 슬라이드
   // console.log("슬라이드 함수 호출확인!");
 
   // 0.슬라이드 공통변수 /////
@@ -139,9 +99,6 @@ function slideFn(selEl) {
     // 1. 오른쪽 버튼 여부 알아내기
     let isRight = this.classList.contains("ab2");
 
-    // 2. 슬라이드 li 새로 읽기
-    let eachOne = slide.querySelectorAll("li");
-
     // 3. 버튼분기하기 '.ab2' 이면 오른쪽버튼
     if (isRight) {
       // 오른쪽버튼
@@ -150,26 +107,7 @@ function slideFn(selEl) {
     } ////// if //////////////
     else {
       // 왼쪽버튼
-      // 1. 맨뒤li 맨앞으로 이동
-      // 놈.놈.놈 -> insertBefore(넣을놈,넣을놈전놈)
-      slide.insertBefore(eachOne[eachOne.length - 1], eachOne[0]);
-      // 2. left값 -330% 만들기 : 들어올 준비 위치!
-      slide.style.left = "-330%";
-      // 3. 트랜지션 없애기
-      slide.style.transition = "none";
-
-      // 같은 left값을 동시에 변경하면 효과가 없음!
-      // 비동기적으로 처리해야함!
-      // -> setTimeout으로 싸주기!
-      // 시간은 0이어도 비동기 처리므로 효과있음!
-
-      setTimeout(() => {
-        // 4. left값 -220%으로 들어오기
-        slide.style.left = "-220%";
-
-        // 5. 트랜지션주기
-        slide.style.transition = TIME_SLIDE + "ms ease-in-out";
-      }, 0);
+      leftSlide();
     } /////// else //////////////
 
     // 4. 블릿순번 변경 함수 호출
@@ -201,23 +139,55 @@ function slideFn(selEl) {
     }); ///////// forEach ///////////
   } /////////// chgIndic함수 ////////////
 
-  // 슬라이드 오른쪽방향 함수 ////////////
+  // 슬라이드 오른쪽버튼클릭시 왼쪽방향이동 함수 ////////////
   function rightSlide() {
     //1.대상이동하기 : -330%
     slide.style.left = "-330%";
     //2.트랜지션주기
-    slide.style.transition = TIME_SLIDE + "ms ease-in-out";
+    slide.style.transition = TIME_SLIDE + "ms ease-out";
     // 이동시간 후 맨앞li 잘라서 맨뒤로 이동하기
     // appendChild(요소)
     setTimeout(() => {
       // 3.맨앞li 맨뒤로 이동
       slide.appendChild(slide.querySelectorAll("li")[0]);
-      // 4.slide left값 -220%
-      slide.style.left = "-220%";
+      // 4.slide left값 -220% -> 최종 left값은 px로
+      slide.style.left = selEl.offsetWidth*-2.2+"px";
       // 5.트랜지션 없애기
       slide.style.transition = "none";
     }, TIME_SLIDE);
   } //////////// rightSlide 함수 ////////////
+
+  // 드래그 이동시엔 left값을 -330%가 아닌 드래그가 이동된 값을 적용한 left값을 적용한다
+  // 함수전달변수를 leftVal="330%" 로 기본 입력값 처리하면
+  // 함수 호출시 전달값이 없는 경우엔 기본값으로 처리하고
+  // 함수 호출시 전달값이 있으면 그 전달될 값으로 처리한다
+  // 이것을 함수 전달변수 기본입력값 처리라고 한다
+  function leftSlide(leftVal = "-330%") {
+    console.log("왼쪽버튼이동left값:", leftVal);
+    // leftVal - li앞에 이동시 left값 설정변수
+    // 0. 슬라이드 li 새로 읽기
+    let eachOne = slide.querySelectorAll("li");
+    // 1. 맨뒤li 맨앞으로 이동
+    // 놈.놈.놈 -> insertBefore(넣을놈,넣을놈전놈)
+    slide.insertBefore(eachOne[eachOne.length - 1], eachOne[0]);
+    // 2. left값 -330% 만들기 : 들어올 준비 위치!
+    slide.style.left = leftVal;
+    // 3. 트랜지션 없애기
+    slide.style.transition = "none";
+
+    // 같은 left값을 동시에 변경하면 효과가 없음!
+    // 비동기적으로 처리해야함!
+    // -> setTimeout으로 싸주기!
+    // 시간은 0이어도 비동기 처리므로 효과있음!
+
+    setTimeout(() => {
+      // 4. left값 -220%으로 들어오기 -> px값으로 변환
+      slide.style.left = selEl.offsetWidth * -2.2 + "px";
+
+      // 5. 트랜지션주기
+      slide.style.transition = TIME_SLIDE + "ms ease-out";
+    }, 0);
+  } //////////// leftSlide 함수 ////////////
 
   /********************************** 
         자동넘기기 기능구현
@@ -268,20 +238,16 @@ function slideFn(selEl) {
     autoT = setTimeout(slideAuto, 5000);
     // 결과적으로 5초후 인터발재실행은 하나만 남는다!
   } //////////// clearAuto 함수 ///////////
-} //////////////// slideFn 함수 ///////////////
-/////////////////////////////////////////////
 
-/*************************************** 
-    [ 드래그 다중적용 함수 만들기 ]
-    함수명 : goDrag
-    기능 : 다중 드래그 기능 적용
-    ********************************************/
-function goDrag(ele) {
+  /////////////////////////////////// 드래그 기능 ////////////////////////
+  ////////////////////////////////////////////////////////
+
   // 마우스 다운시 z-index 대상 1로 만들때 다른 요소는 0
-  // console.log(ele);
+  // console.log(slider);
+
   // 드래그 적용 대상 및 이벤트 설정하기 //
   // 1. 대상선정 : 보내준 대상 HTML 컬렉션
-  const dtg = ele;
+  const dtg = slider;
   // const dtg = mFn.qs(".dtg2");
 
   // 드래그 대상의 css기본값을 셋팅한다
@@ -292,7 +258,13 @@ function goDrag(ele) {
   // .banbx의 width값 곱하기 2.2
   // 기준위치값 변수에 할당
   let leftVal = mFn.qs(".banbx").offsetWidth * -2.2;
-  // console.log("left 셋팅값:", leftVal);
+  // 왼쪽으로 이동할 기준값(기준 위치값 * 1.1)
+  let valFirst = leftVal * 1.1;
+  // 오른쪽으로 이동할 기준값(기준위치값 * 0.9)
+  let valSecond = leftVal * 0.9;
+  console.log("기준값:", leftVal);
+  console.log("기준값 * 110%:", valFirst);
+  console.log("기준값 * 90% :", valSecond);
   // left위치값 최초셋업
   dtg.style.left = leftVal + "px";
 
@@ -404,9 +376,32 @@ function goDrag(ele) {
     lastPoint(e);
     dtg.style.cursor = "grab";
 
-    // 대상의 left값 찍기
-    console.log('슬라이드left:',dtg.style.left);
-    // // console.log("업", dragSts);
+    // 대상의 left값 찍기(px단위를 parseInt()로 없애기)
+    let currentLeft = parseInt(dtg.style.left);
+    console.log("슬라이드left:", currentLeft, "X축순수이동값:", resultX);
+    // 대상 슬라이드 이동기준 분기하기
+    if (currentLeft < valFirst) {
+      console.log("왼쪽으로 이동");
+      // 오른쪽 버튼 클릭시 왼쪽 이동과 동일
+      rightSlide();
+    } else if (currentLeft > valSecond) {
+      console.log("오른쪽으로 이동");
+      // 슬라이드 이동함수 호출시 드래그시 이동된값이 계산된 -330%값을 보내준다
+      let resVal = (selEl.offsetWidth * -3.3) + resultX;
+      leftSlide(resVal+'px');
+    } else {
+      // valFirst와 valSecond의 사이 범위
+      console.log("제자리 이동");
+      slide.style.left = "-220%";
+      slide.style.transition = ".3s ease-in-out";
+    }
+
+    // 드래그 시 더해지는 마지막 위치값 lastX를
+    // -220%의 left px 값으로 초기화해준다(숫자만)
+    lastX = selEl.offsetWidth*-2.2;
+    // 이것을 해야 오작동 없음
+
+    // // console.log("업", lastX);
   }); ///// mouseup /////////
 
   // (3) 마우스 무브 이벤트 함수연결하기
@@ -419,7 +414,8 @@ function goDrag(ele) {
     // 과도한 드래그로 갑자기 아웃되면 lastX,lastY값이 셋팅되지 못한다
     // 이것을 기존 요소의 위치값으로 보정함
     // 단 , style위치값 코드는 'px' 단위가 있으므로 parseInt 처리
-    lastX = parseInt(dtg.style.left);
+    // lastX = parseInt(dtg.style.left);
+    // 드래그 배너에서는 불필요(오작동)
 
     // // console.log("마우스 나감 ", dragSts);
   }); //mouseleave
@@ -450,5 +446,5 @@ function goDrag(ele) {
 
   // (3) 마우스 무브 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchmove", dMove); // touchmove //
-} ///////////////////// goDrag 함수 ////////
+} ///////////////////// slideFn 함수 ////////
 //////////////////////////////////////////

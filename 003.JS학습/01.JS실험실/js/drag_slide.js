@@ -85,7 +85,11 @@ function slideFn(selEl) {
   // 2. 이벤트 설정하기 : 버튼요소들 -> forEach()
   abtn.forEach((ele) => mFn.addEvt(ele, "click", goSlide));
 
-  // 3. 함수만들기
+  // 3. 함수만들기 //////////////////////////////
+  /******************************************** 
+    함수명 : goSlide
+    기능: 이동버튼 클릭시 이동분기하기
+  ********************************************/
   function goSlide() {
     // a요소 기본이동 막기
     event.preventDefault();
@@ -129,6 +133,11 @@ function slideFn(selEl) {
     addOnSlide(3);
   } ////////// goSlide 함수 /////////
 
+  /******************************************** 
+    함수명 : addOnSlide
+    기능: 중앙슬라이드 클래스 on 처리
+  ********************************************/
+
   // 중앙 슬라이드 클래스 on처리 함수//
   function addOnSlide(slideSeq) {
     mFn.qsaEl(slide, "li").forEach((ele, idx) => {
@@ -139,6 +148,11 @@ function slideFn(selEl) {
       }
     }); /// forEach///
   } // addOnSlide 함수 ///
+
+  /******************************************** 
+    함수명 : chgIndic
+    기능: 블릿 순번 변경
+  ********************************************/
 
   // 블릿순번 변경 함수 /////////////
   function chgIndic(isRight) {
@@ -162,6 +176,10 @@ function slideFn(selEl) {
     }); ///////// forEach ///////////
   } /////////// chgIndic함수 ////////////
 
+  /******************************************** 
+    함수명 : rightSlide
+    기능: 왼쪽방향 이동(오른쪽 버튼)
+  ********************************************/
   // 슬라이드 오른쪽버튼클릭시 왼쪽방향이동 함수 ////////////
   function rightSlide() {
     //1.대상이동하기 : -330%
@@ -178,14 +196,21 @@ function slideFn(selEl) {
       // 5.트랜지션 없애기
       slide.style.transition = "none";
     }, TIME_SLIDE);
+    
+    // 슬라이드 커버 만들기 함수 호출
+    coverDrag();
   } //////////// rightSlide 함수 ////////////
 
-  // 드래그 이동시엔 left값을 -330%가 아닌 드래그가 이동된 값을 적용한 left값을 적용한다
-  // 함수전달변수를 leftVal="330%" 로 기본 입력값 처리하면
-  // 함수 호출시 전달값이 없는 경우엔 기본값으로 처리하고
-  // 함수 호출시 전달값이 있으면 그 전달될 값으로 처리한다
-  // 이것을 함수 전달변수 기본입력값 처리라고 한다
+  /******************************************** 
+   함수명 : leftSlide
+   기능: 오른쪽방향 이동(왼쪽 버튼)
+   ********************************************/
   function leftSlide(leftVal = "-330%") {
+    // 드래그 이동시엔 left값을 -330%가 아닌 드래그가 이동된 값을 적용한 left값을 적용한다
+    // 함수전달변수를 leftVal="330%" 로 기본 입력값 처리하면
+    // 함수 호출시 전달값이 없는 경우엔 기본값으로 처리하고
+    // 함수 호출시 전달값이 있으면 그 전달될 값으로 처리한다
+    // 이것을 함수 전달변수 기본입력값 처리라고 한다
     console.log("왼쪽버튼이동left값:", leftVal);
     // leftVal - li앞에 이동시 left값 설정변수
     // 0. 슬라이드 li 새로 읽기
@@ -210,6 +235,9 @@ function slideFn(selEl) {
       // 5. 트랜지션주기
       slide.style.transition = TIME_SLIDE + "ms ease-out";
     }, 0);
+
+    // 슬라이드 커버 만들기 함수 호출
+    coverDrag();
   } //////////// leftSlide 함수 ////////////
 
   /********************************** 
@@ -230,6 +258,10 @@ function slideFn(selEl) {
   // clearTimeout(할당변수) 해야 실행 쓰나미를 막을 수 있다!
 
   // 인터발호출 함수 //////////
+  /******************************************** 
+    함수명 : slideAuto()
+    기능: 인터발호출
+  ********************************************/
   function slideAuto() {
     autoI = setInterval(() => {
       // 오른쪽이동 슬라이드 함수호출
@@ -250,6 +282,11 @@ function slideFn(selEl) {
   // 인터발함수 최초호출!
   slideAuto();
 
+  /******************************************** 
+    함수명 : clearAuto
+    기능: 자동넘김을 멈추기(인터발삭제)
+  ********************************************/
+
   // 버튼을 클릭할 경우를 구분하여 자동넘김을 멈춰준다!
   function clearAuto() {
     // 자동넘김 지우기
@@ -264,6 +301,20 @@ function slideFn(selEl) {
     autoT = setTimeout(slideAuto, 5000);
     // 결과적으로 5초후 인터발재실행은 하나만 남는다!
   } //////////// clearAuto 함수 ///////////
+
+  /******************************************** 
+    함수명 : coverDrag
+    기능: 슬라이드 이동시 드래그 막기
+  ********************************************/
+  function coverDrag() {
+    // selEl로 전달된 대상에 클래스 on을 줘서
+    // 가상요소로 셋팅된 슬라이드 커버가 나오게 함
+    selEl.classList.add("on");
+    // 슬라이드 기본 이동시간(TIME_SLIDE)후 on 제거
+    setTimeout(() => {
+      selEl.classList.remove("on");
+    }, TIME_SLIDE);
+  } //// coverDrag
 
   /////////////////////////////////// 드래그 기능 ////////////////////////
   ////////////////////////////////////////////////////////
@@ -327,7 +378,7 @@ function slideFn(selEl) {
     // 드래그 상태는 dragSts값이 true인 경우에만 혀용
     if (dragSts) {
       // 0. 자동넘김 멈춤함수 호출하기
-      clearAuto();
+      // clearAuto();
       // // console.log("드래그중");
       // 1. 드래그 상태에서 움직일 때 포인터 위치값
       // - 브라우저용 포인터 위치는 pageX, pageY를 사용
@@ -429,8 +480,10 @@ function slideFn(selEl) {
   // (1) 마우스 다운 이벤트 함수연결하기
   mFn.addEvt(dtg, "mousedown", (e) => {
     // 0. 자동넘김 멈춤함수 호출하기
-    clearAuto();
-
+    // clearAuto();
+    // 자동호출을 지우기만 해서 자동시작안함
+    clearInterval(autoI);
+    clearTimeout(autoT);
     // 드래그 상태값 true로 변경
     dTrue();
     // 첫번째 위치포인트 셋팅
@@ -480,7 +533,10 @@ function slideFn(selEl) {
   // (1) 마우스 다운 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchstart", (e) => {
     // 0. 자동넘김 멈춤함수 호출하기
-    clearAuto();
+    // clearAuto();
+    // 자동호출을 지우기만 해서 자동시작안함
+    clearInterval(autoI);
+    clearTimeout(autoT);
     // 드래그 상태값 true로 변경
     dTrue();
     // 첫번째 위치포인트 셋팅

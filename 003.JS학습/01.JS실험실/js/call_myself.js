@@ -86,4 +86,37 @@ mFn.addEvt(gbox,"mouseleave",()=>{
 });
 
 
-setTimeout(moveGallery, 2000);
+// setTimeout(moveGallery, 2000);
+
+
+/////////////////////////////////////
+// 프로그래스 바 퍼센트 증가하기 재귀호출함수 만들기 ///
+// 퍼센트 증가 숫자변수
+let percent = 0;
+// 숫자 출력박스 : .pNum
+const pNum = mFn.qs(".pNum");
+// 퍼센트바 : .bar
+const bar = mFn.qs(".bar");
+// 글자출력박스 : .txt
+const txt = mFn.qs(".txt");
+
+increasePercent();
+// 재귀호출함수 만들기
+function increasePercent(){
+  
+  // 1.pNum에 숫자출력
+  pNum.innerHTML = ++percent + "%";
+  // 2. 퍼센트바 값 동시에 증가
+  bar.style.width = percent + "%";
+  // 3.중가 숫자가 100보다 작을때까지 계속 호출
+  if(percent<100){
+    setTimeout(increasePercent,60);
+  }
+  else{
+    // 4. 제귀호출이 끝나면 "준비 글자를 출발로 변경"
+    txt.innerHTML = "출발";
+    bar.style.backgroundColor = "red";
+    // 5. 슬라이드 이동함수 호출하기(타임아웃호출은 주석)
+    moveGallery();
+  } //// else ///
+} // increasePercent 함수 //

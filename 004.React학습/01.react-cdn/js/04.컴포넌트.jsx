@@ -74,13 +74,22 @@ function IronMan() {
 ReactDOM.render(<IronMan />, target[1]);
 
 //[ 이미지 생성 공통 검포넌트 ] //
-function MakeImage(props) {
+function MakeImage({desc,isrc,ialt}) {
+  // 하나의 변수에는 전달된 값이 보낼때 설정된 객체로 전달된다
+  // {속성:값, 속성: 값,...}
+  // console.log(props);
   return (
     <React.Fragment>
-      <h2>{props.desc}</h2>
-      <img src={"./images/" + props.isrc} alt={props.ialt} />
+      <h2>{desc}</h2>
+      <img src={"./images/" + isrc} alt={ialt} />
     </React.Fragment>
   );
+  // return (
+  //   <React.Fragment>
+  //     <h2>{props.desc}</h2>
+  //     <img src={"./images/" + props.isrc} alt={props.ialt} />
+  //   </React.Fragment>
+  // );
 } ////// makeImage 컴포넌트 //////
 
 /************************************************* 

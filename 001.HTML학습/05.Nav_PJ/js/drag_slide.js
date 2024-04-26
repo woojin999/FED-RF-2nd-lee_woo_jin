@@ -376,7 +376,16 @@ function slideFn(selEl) {
   const dMove = (e) => {
     // e - 이벤트 객체 전달변수
     // 드래그 상태는 dragSts값이 true인 경우에만 혀용
+
+    // 이동버튼+블릿 이벤트 없앰설정하기
+    // 상위 selEl에 클래스 .no주면 된다
+    if (dragSts)  selEl.classList.add("no");
+    else selEl.classList.remove("no");
+
     if (dragSts) {
+
+      
+
       // 0. 자동넘김 멈춤함수 호출하기
       // clearAuto();
       // // // console.log("드래그중");
@@ -518,13 +527,17 @@ function slideFn(selEl) {
   // (4) 마우스가 대상을 벗어나면 드래그상태값 false처리하기
   mFn.addEvt(dtg, "mouseleave", () => {
     // 드래그 상태값 false로 변경
-    // 하단 컨트롤 mouseenter 에서 처리하는 
+    // 하단 컨트롤 mouseenter 에서 처리하는
     // dragSts값처리시 mouseleave에서 처리하는 코드가 가장 나중에 처리하게 하려면
     // 해당코드를 setTimeout 함수에 넣는다
     // 결과적으로 이 코드는 큐(queue)에 들어가서 기존 처리되는 일반 요청 처리 코드가
     // 모두 스택(stack)에서 처리가 끝날때까지 기다렸다가 큐에서 순서대로 스택으로
-    // 넘어가 처리된다 
-    setTimeout(dFalse,0);
+    // 넘어가 처리된다
+    setTimeout(dFalse, 0);
+
+    if (dragSts) {
+      moveDragSlide();
+    }
 
     // dFalse();
 
@@ -537,6 +550,18 @@ function slideFn(selEl) {
     // // // console.log("마우스 나감 ", dragSts);
   }); //mouseleave
 
+  // (5) 버튼,블릿에 오버시 자동처리호출셋팅 //
+  // (조건:드래그 상태 변수인 dragSts값이 true일때)
+  /*   mFn.qsaEl(selEl, ".controls").forEach((ele) =>
+    ele.addEventListener("mouseenter", () => {
+      console.log("dragSts:", dragSts);
+      if (dragSts) {
+        // 드래그 중일때 처리
+        moveDragSlide();
+        clearAuto();
+      }
+    })
+  ); */
   /////// 모바일 이벤트 처리 구역 //////////////////////
 
   // (1) 마우스 다운 이벤트 함수연결하기
@@ -574,20 +599,7 @@ function slideFn(selEl) {
   // (3) 마우스 무브 이벤트 함수연결하기
   mFn.addEvt(dtg, "touchmove", dMove); // touchmove //
 
-  // (4) 버튼,블릿에 오버시 자동처리호출셋팅 //
-  // (조건:드래그 상태 변수인 dragSts값이 true일때)
-  mFn.qsaEl(selEl, ".controls").forEach((ele) =>
-    ele.addEventListener("mouseenter", () => {
-      console.log("dragSts:", dragSts);
-      if (dragSts) {
-        // 드래그 중일때 처리
-        moveDragSlide();
-        clearAuto();
-      }
-    })
-  );
-
-  // (5) 브라우저 크기 리사이즈시 동적 변경값 업데이트함수
+  // (4) 브라우저 크기 리사이즈시 동적 변경값 업데이트함수
   mFn.addEvt(window, "resize", () => {
     // 1. 기준위치값 left 업데이트
     originalValue = selEl.offsetWidth * -2.2;

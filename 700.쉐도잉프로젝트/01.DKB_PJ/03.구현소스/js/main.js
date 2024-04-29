@@ -15,14 +15,14 @@ import { startSS, setScrollPos } from "./smoothScroll23.js";
 import * as dkbData from "../data/dkb_data.js";
 // import { previewData } from '../data/dkb_data.js';
 
-import setSlide from "./drag_slide.js"
+import setSlide from "./drag_slide_multi.js"
 
 // 구현코드 파트
 
 
 
 // 1. 부드러운 스크롤 호출
-startSS();
+// startSS();
 
 
 

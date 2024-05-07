@@ -183,6 +183,6 @@ function openWindow() {
   // 새창 열기 : window.open(이동할주소)
   if (url) {
     window.open(url);
-  }
+  } else alert("선택을 변경해주세요.")
   
 } //////////////// openWindow 함수 /////////

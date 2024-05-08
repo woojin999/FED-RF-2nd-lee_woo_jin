@@ -1,7 +1,7 @@
 //JS4-4. 배열의 정렬과 검색 JS
 
 // 나의 함수 불러오기
-import mFn from './my_function.js';
+import mFn from "./my_function.js";
 
 /****************************************************** 
     [ JS 배열의 정렬 ]
@@ -99,27 +99,26 @@ import mFn from './my_function.js';
 const arrNumber = [4, 5, 8, 10, 2, 1, 9, 3, 7, 6];
 
 // 예를 위한 숫자값 배열
-const arrNumber2 = [380,1000,245,2278];
+const arrNumber2 = [380, 1000, 245, 2278];
 
 // 문자값 배열
 const arrString = ["파", "타", "하", "가", "바", "사", "다", "라", "차"];
 
-
 // sort()는 기본 문자로 처리하므로 숫자는 내부함수로 빼기연산처리함
-// console.log('숫자배열:',arrNumber2);
-// console.log('숫자배열 오름차순:',arrNumber2.sort());
-// console.log(
+// // console.log('숫자배열:',arrNumber2);
+// // console.log('숫자배열 오름차순:',arrNumber2.sort());
+// // console.log(
 //   "숫자배열 오름차순 sort((a,b)=>a-b)",
 //   arrNumber2.sort((a, b) => a - b)
 // );
-// console.log(
+// // console.log(
 //   "숫자배열 내림차순 sort((a,b)=>a-b)",
 //   arrNumber2.sort((a, b) => b - a)
 // );
 
-// console.log('문자배열:',arrString);
-// console.log('문자배열 오름차순 sort():',arrString.sort());
-// console.log('문자배열 내림차순 reverse():',arrString.reverse());
+// // console.log('문자배열:',arrString);
+// // console.log('문자배열 오름차순 sort():',arrString.sort());
+// // console.log('문자배열 내림차순 reverse():',arrString.reverse());
 
 ///////////////////////////////////////////////////////
 // 배열 데이터 화면 출력하기 //
@@ -129,29 +128,31 @@ const arrString = ["파", "타", "하", "가", "바", "사", "다", "라", "차"
 
 // (1) 출력대상: .showNum
 
-const showNum =mFn.qs('.showNum');
+const showNum = mFn.qs(".showNum");
 
 // (2) map() 메서드 없이 배열값을 이미지 태그로 변환하여
 // 코드 만들기 함수
-const returnTag = (x) => { // x는 배열 전달변수
-    // 1.태그 저장용 변수
-    let hcode = '';
-    // 2.배열만큼 순회하여 태그 만들기
-    x.forEach(v=>{
-        // console.log('나나',v);
-        hcode += `
+const returnTag = (x) => {
+  // x는 배열 전달변수
+  // 1.태그 저장용 변수
+  let hcode = "";
+  // 2.배열만큼 순회하여 태그 만들기
+  x.forEach((v) => {
+    // // console.log('나나',v);
+    hcode += `
             <img src="./images/num/num_0${v}.png" alt="숫자${v}이미지">
         `;
-    });// forEach //
-    // 3. 코드 리턴하기
-    return hcode;
+  }); // forEach //
+  // 3. 코드 리턴하기
+  return hcode;
 }; // returnTag 함수 ////
 
 // (3) 배열 숫자 데이터만큼 이미지로 변환하여 화면출력하기
-const showImgNum = (arrObj) => { // arrObj 전달된 배열
-    showNum.innerHTML = arrObj
-      .map((v) => `<img src="./images/num/num_0${v}.png" alt="숫자${v}이미지">`)
-      .join("");
+const showImgNum = (arrObj) => {
+  // arrObj 전달된 배열
+  showNum.innerHTML = arrObj
+    .map((v) => `<img src="./images/num/num_0${v}.png" alt="숫자${v}이미지">`)
+    .join("");
 }; //// showImgNum 함수 /////////
 // const showImgNum = () => {
 //     showNum.innerHTML = returnTag(arrNumber);
@@ -169,16 +170,16 @@ map((배열값, 순번,전체배열)=>{})
 ->> 배열.map.join('') -> 배열 맵쪼잉
 -> join()을 안쓰면 배열의 기본값이 콤마로 연결되어 할당되는데 콤마를 없애려면 반드시 join()을 써야함 */
 
-/* console.log('원본 배열:',arrNumber2);
+/* // console.log('원본 배열:',arrNumber2);
 
-console.log('원본 배열 로 태그작성',
+// console.log('원본 배열 로 태그작성',
 arrNumber2.map(v=>`<숫자>${v}</숫자>`));
 
-console.log('원본 배열 로 태그작성한 배열을 문자열로 변경',
+// console.log('원본 배열 로 태그작성한 배열을 문자열로 변경',
 arrNumber2.map(v=>`<숫자>${v}</숫자>`).join(''));
 
 
-console.log('원본 배열 로 태그작성',
+// console.log('원본 배열 로 태그작성',
 arrNumber2.map((v,i)=> `회원번호${i+1}:${v}포인트`)); */
 
 // (4) 최초호출
@@ -187,71 +188,73 @@ showImgNum(arrNumber);
 // (5) 정렬 기준에 선택박스 변경 이벤트 발생시
 // 정렬 변경하기 (오름차순/내림차순)
 // (5-1) 대상: #sel 선택박스
-const selBox = mFn.qs('#sel');
+const selBox = mFn.qs("#sel");
 // (5-2) 이벤트 연결하기 : 이벤트 종류 - change
-mFn.addEvt(selBox,'change',(e)=>changeSort(e,arrNumber));
+mFn.addEvt(selBox, "change", (e) => changeSort(e, arrNumber));
 // (5-3) 정렬 변경함수 만들기
-function changeSort(e,arrObj) { //e - 이벤트발생 요소의 전달된 이벤트변수,
-    //  arrObj - 배열전달변수 -> 원본배열을 담음(주소복사됨)
-    //  원본배열을 보존키위해 깊은복사를 함
-    // 배열값이 일반배열값이므로 스프레드 연산자 사용
-    arrObj = [...arrObj];
-    // -> 다시 새로운 배열로 값이 복사됨
-    
-    // 1. 선택옵션값 읽어오기
-    let optVal = e.currentTarget.value;
-    // 추가 : 이벤트 발생요소의 아이디 읽어오기
-    let selId = e.currentTarget.id;
-    console.log('선택값',optVal,'/아이디',selId);
-    // 2. 정렬 변경하기
-    // 2-1. 오름차순 : 값 1
-    if (optVal == 1) {
-        arrObj.sort((a,b)=>a==b?0:a<b?-1:1);
-        // 해석 - 앞 뒤 같으면 0, 뒤가 크면 -1 , 앞이 크면 1
-        // 즉, 앞값이 크면 자리를 바꿔서 유지하므로 오른차순 정렬
-        // ((공통 정렬 처리하기))
-      // 문자든 숫자든 sort()메서드의 내부적 처리에서 앞뒤 문자가 같으면 0, 뒷문자가 크면 -1
-      // 뒷문자가 작음녀 1로 리턴값을 처리하면 된다
-      // -> 숫자 시그널: 0 아무것도 안함, 1 바꿔서 유지, -1  그대로 유지
-      // -> 내부적 처리란 ? 문자일 경우 '가' > '나' 1로 처리할 경우
-      // '나','가' 로 순서를 바꿔서 처리함(내림차순)
-      // 즉, 문자열도 순서대로 글자 알파벳, 가나다라 순 등 특정순서기준이 브라우저에 구현되어있음
-      // 빼기처리는 문자 등 기타 데이터는 처리 불가
-      // sort() 빼기 연산처리 : 앞수-뒷수 (양수 결과일경우 순서바꾸기함)
-      // arrObj.sort((a,b)=>a-b);
-    } /// if ///
-    // 2-2 내림차순 : 값 2
-    else if (optVal == 2) {
-        // arrObj.sort((a,b)=>b-a);
-        arrObj.sort((a,b)=>a==b?0:a<b?1:-1);
-        // 해석 - 앞 뒤 같으면 0, 뒤가 크면 1 , 앞이 크면 -1
-        // 즉 뒷값이 크면 자리를 바꿔서 유지하므로 내림차순 정렬
-    } // else if //
+function changeSort(e, arrObj) {
+  //e - 이벤트발생 요소의 전달된 이벤트변수,
+  //  arrObj - 배열전달변수 -> 원본배열을 담음(주소복사됨)
+  //  원본배열을 보존키위해 깊은복사를 함
+  // 배열값이 일반배열값이므로 스프레드 연산자 사용
+  arrObj = [...arrObj];
+  // -> 다시 새로운 배열로 값이 복사됨
 
-    // (주의) 원본배열을 정렬후엔 원본배열은 없어진다
-    // 배열을 다른변수에 할당해도 다른변수를 정렬후엔 여전히 원본배열은 없어진다
+  // 1. 선택옵션값 읽어오기
+  let optVal = e.currentTarget.value;
+  // 추가 : 이벤트 발생요소의 아이디 읽어오기
+  let selId = e.currentTarget.id;
+  // console.log("선택값", optVal, "/아이디", selId);
+  // 2. 정렬 변경하기
+  // 2-1. 오름차순 : 값 1
+  if (optVal == 1) {
+    arrObj.sort((a, b) => (a == b ? 0 : a < b ? -1 : 1));
+    // 해석 - 앞 뒤 같으면 0, 뒤가 크면 -1 , 앞이 크면 1
+    // 즉, 앞값이 크면 자리를 바꿔서 유지하므로 오른차순 정렬
+    // ((공통 정렬 처리하기))
+    // 문자든 숫자든 sort()메서드의 내부적 처리에서 앞뒤 문자가 같으면 0, 뒷문자가 크면 -1
+    // 뒷문자가 작음녀 1로 리턴값을 처리하면 된다
+    // -> 숫자 시그널: 0 아무것도 안함, 1 바꿔서 유지, -1  그대로 유지
+    // -> 내부적 처리란 ? 문자일 경우 '가' > '나' 1로 처리할 경우
+    // '나','가' 로 순서를 바꿔서 처리함(내림차순)
+    // 즉, 문자열도 순서대로 글자 알파벳, 가나다라 순 등 특정순서기준이 브라우저에 구현되어있음
+    // 빼기처리는 문자 등 기타 데이터는 처리 불가
+    // sort() 빼기 연산처리 : 앞수-뒷수 (양수 결과일경우 순서바꾸기함)
+    // arrObj.sort((a,b)=>a-b);
+  } /// if ///
+  // 2-2 내림차순 : 값 2
+  else if (optVal == 2) {
+    // arrObj.sort((a,b)=>b-a);
+    arrObj.sort((a, b) => (a == b ? 0 : a < b ? 1 : -1));
+    // 해석 - 앞 뒤 같으면 0, 뒤가 크면 1 , 앞이 크면 -1
+    // 즉 뒷값이 크면 자리를 바꿔서 유지하므로 내림차순 정렬
+  } // else if //
 
-    // 3. 정렬 변경된 배열 화면에 출력하기
-    // 선택박스 아이디에 따라 호출헤주는 함수가 다름
-    if(selId == 'sel') showImgNum(arrObj);
-    else if(selId == 'sel2') showSpanText(arrObj);
+  // (주의) 원본배열을 정렬후엔 원본배열은 없어진다
+  // 배열을 다른변수에 할당해도 다른변수를 정렬후엔 여전히 원본배열은 없어진다
 
-    // 전달변수에 할당된 배열확인
-    console.log("정렬후 할당배열", arrObj);
-    // 원본 배열확인
-    console.log("정렬후 원본배열",selId=='sel'? arrNumber:arrString);
-}// changeSort 함수 ///
+  // 3. 정렬 변경된 배열 화면에 출력하기
+  // 선택박스 아이디에 따라 호출헤주는 함수가 다름
+  if (selId == "sel") showImgNum(arrObj);
+  else if (selId == "sel2") showSpanText(arrObj);
+
+  // 전달변수에 할당된 배열확인
+  // console.log("정렬후 할당배열", arrObj);
+  // 원본 배열확인
+  // console.log("정렬후 원본배열", selId == "sel" ? arrNumber : arrString);
+} // changeSort 함수 ///
 
 ////////////////////////////////
 // 2. 문자로만 된 배열의 화면 뿌리기//
 // map() 메서드로 배열값을 태그로 감싸서 출력하기
 
 // (1) 출력대상 : .showNum2
-const showText = mFn.qs('.showNum2');
+const showText = mFn.qs(".showNum2");
 
 // (2) 배열만큼 태그를 넣고 문자 출력하기
-const showSpanText = (arrObj) => { // arrObj 전달된 배열
-    showText.innerHTML = arrObj.map(v=>`<span>${v}</span>`).join('');
+const showSpanText = (arrObj) => {
+  // arrObj 전달된 배열
+  showText.innerHTML = arrObj.map((v) => `<span>${v}</span>`).join("");
 }; //// showSpanText 함수 ////
 
 // (3) 텍스트 출력함수 최초호출
@@ -259,9 +262,127 @@ showSpanText(arrString);
 
 // (4) 텍스트 정렬 선택박스 변경시 정렬함수 호출하기
 // (4-1) 대상: #sel2
-const selBox2 = mFn.qs('#sel2');
+const selBox2 = mFn.qs("#sel2");
 
 // (4-2) 이벤트 연결하기 : 이벤트 종류 - change
 // 연결된 함수는 위의 숫자 정렬한 정렬함수를 사용한다
-mFn.addEvt(selBox2,'change',e=>changeSort(e,arrString));
+mFn.addEvt(selBox2, "change", (e) => changeSort(e, arrString));
 
+// 3. 객체 데이터 배열의 정렬 ////
+///////////////////////////////////////
+
+// 3-1. 데이터 : 객체데이터 배열
+// 데이터구조 : (1) 순번 - idx / (2) 제목 - tit / (3) 내용 - cont
+const list1 = [
+  {
+    idx: 8,
+    tit: "나는 누구?",
+    cont: "공동구매) 슬로건 공구 (계좌와 네이버폼)",
+  },
+  {
+    idx: 4,
+    tit: "여기는 어디?",
+    cont: "총공 공지] 오늘부터 일 2회, 총공 진행합니다",
+  },
+  {
+    idx: 1,
+    tit: "나야나",
+    cont: "연합 갈라 서포트 계좌오픈",
+  },
+  {
+    idx: 15,
+    tit: "이제 얼마나 남은거니?",
+    cont: "음악프로그램에 출연 요청글도 써볼까요?",
+  },
+]; /////////////// list1 /////////////
+
+// console.log(list1);
+
+// 3-2. 출력대상 : .showList3
+const showList3 = mFn.qs(".showList3");
+
+// 3-3. 배열 데이터로 코드 만들기 함수
+const updateCode = (arrData, exBox) => {
+  // arrData - 배열 데이터 / exBox - 출력할 박스
+  // 3-4. 태그 출력하기
+  exBox.innerHTML = `
+         <table>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${arrData
+              .map(
+                (v) => `
+                <tr>
+                    <td>${v.idx}</td>
+                    <td>${v.tit}</td>
+                    <td>${v.cont}</td>
+                </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+    `;
+}; ///////// updateCode 함수 //////////
+
+// 3-5 코드 만들어 출력하는 함수 호출하기
+// updateCode(배열데이터,출력박스)
+updateCode(list1, showList3);
+
+// 3-6. 정렬 변경 이벤트 발생시 실제 정렬변경하기
+// -change 이벤트 대상 선택박스들
+// (1) 정렬종류 대상 : .sel3
+const sel3 = mFn.qs(".sel3");
+// (2) 정렬기준 대상:.cta3
+const cta3 = mFn.qs(".cta3");
+
+// (3) 정렬종류 대상 선택 변경시
+// -> 실제 정렬을 적용하여 리스트를 갱신한다
+// -> 정렬 적용시 정렬기준 대상 선택항목을 가져가야함
+mFn.addEvt(sel3, "change", (e) => sortingsFn(e, cta3.value ,list1, showList3));
+
+// (4) 정렬기준 대상 선택 변경시
+// -> 정렬종류 대상 선택 초기화하기("정렬선택" 으로 변경)
+mFn.addEvt(cta3, "change", ()=>{
+  // 정렬종류 첫번째 값은 value가 "0" 이므로
+  // 이것을 value 에 할당하면 선택박스 값이 첫번째로 변경된다  
+  sel3.value = "0";  
+}); ////// change 이벤트 함수 ////
+
+
+// 정렬 함수 만들기 /////////
+function sortingsFn(evt, cta, arrData, exBox) {
+  // evt - 이벤트 발생요소의 이벤트객체 전달
+  // cta - 정렬기준값(객체속성명:키명)
+  // arrData - 배열데이터
+  // exBox - 출력대상 박스
+//   console.log(evt, arrData, exBox);
+
+  // 1. 선택값 읽어오기(오름차순:1, 내림차순:2)
+  let selVal = evt.target.value;
+  console.log("선택값",selVal);
+  
+  // 검색기준 선택박스 값 읽어오기
+  console.log("정렬기준:", cta);
+
+  // 2. 정렬 분기하기 /////////
+  // 2-1. 오름차순
+  if (selVal == 1) {
+    arrData.sort((a, b) => (a[cta] == b[cta] ? 0 : a[cta] > b[cta] ? 1 : -1));
+  } // if ////
+  // 2-2. 내림차순
+  else if(selVal ==2){
+    arrData.sort((a, b) => (a[cta] == b[cta] ? 0 : a[cta] > b[cta] ? -1 : 1));
+  } /// elseif
+
+  console.log("정렬결과:",arrData);
+
+  // 3. 정렬결과 리스트 업데이트 하기
+  updateCode(arrData,exBox); 
+} ///////////sortingFn 함수 //////////

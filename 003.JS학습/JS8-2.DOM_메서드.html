@@ -321,33 +321,42 @@
           // 6. 클릭시 li지우기 셋팅하기: 클릭된 요소 지우기
           newEle.onclick = () => newEle.remove();
 
-          
           // 7. 변경대상에 새로운 li 넣기
           // appendChild(요소);
           // 기존요소면 맨뒤로 이동, 새요소면 맨뒤에 추가
           box2.appendChild(newEle);
         } // makeEle 함수 ///
 
-        qsaEl(box2,"li").forEach(ele=>{
+        qsaEl(box2, "li").forEach((ele) => {
           // 지움설정
           ele.onclick = () => ele.remove();
           // 툴팁 넣기
-          qsEl(ele,"img").title = "클릭하면 삭제";
+          qsEl(ele, "img").title = "클릭하면 삭제";
         });
 
         //// [ 맨뒤이동 버튼 클릭시] /////////
         // 맨앞요소를 맨뒤로 이동하기 ///
         // 이벤트 대상: .mvl
         // 변경대상: #div02 ul -> box2변수
+        qs(".mvl").onclick = () => {
+          box2.appendChild(qsaEl(box2, "li")[0]);
+        };
 
         /// [맨앞이동버튼 클릭시] ////////////
         // 맨뒤li가 맨 앞으로 이동됨
         // 이벤트 대상: .mvf
         // 변경대상: #div02 ul -> box2변수
+        qs(".mvf").onclick = () => {
+          let target = qsaEl(box2, "li");
+          box2.insertBefore(
+            target[target.length - 1],
+            target[0]
+          );
+        };
         /**************************************************
-                  ※ appendChild() 와 insertBefore()는
-                  대상을 정하는 것에 따라 중간에 적용할 수 있다!
-              ************************************************/
+            ※ appendChild() 와 insertBefore()는
+            대상을 정하는 것에 따라 중간에 적용할 수 있다!
+        ************************************************/
       } //////////loadFn 함수 //////////////////
       ////////////////////////////////
 

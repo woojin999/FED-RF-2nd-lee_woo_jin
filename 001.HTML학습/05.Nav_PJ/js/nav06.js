@@ -4,10 +4,17 @@
 // 모듈 불러오기 파트
 // 내 함수 불러오기
 import mFn from "./my_function.js";
+
+// GNB메뉴 생성 함수 파일 불러오기
+import makeMenu from "./gnb_menu.js";
+
 // 드래그 슬라이드 기능
 import setSlide from "./drag_slide.js";
 
 // 기능구현파트 ///////
+
+// 메뉴 구현함수 호출하기
+makeMenu(mFn.qs(".gnb"));
 
 (() => {
   // 1.배너 리스트 셋팅하기

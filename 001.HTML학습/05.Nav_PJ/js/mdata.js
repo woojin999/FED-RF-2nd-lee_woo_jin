@@ -164,3 +164,5 @@ const mdata = {
     잡화: ["잡화", "마스크"],
   },
 }; ///////////// mdata ///////////////////
+
+export default mdata;

@@ -15,7 +15,14 @@ import * as dkbData from "../data/dkb_data.js";
 
 import setSlide from "./drag_slide_multi.js";
 
-// 구현코드 파트
+// 서브박스 셋팅 코드 불러오기 //////
+import showSubBox from "./sub_cont.js";
+// 바로실행
+// 박스 생성후 호출
+setTimeout(showSubBox,0);
+// 시간을 0으로 써도 안써도 settimeout()으로 함수를 호출하면 스택에 실행후 큐에서 가지고 있다가 스택 코드 실행이 모두 끝난 후 호출하여 실행함
+
+// 구현코드 파트 //////////
 
 // 1. 부드러운 스크롤 호출
 const mySmooth = new SmoothScroll(document,30,20);

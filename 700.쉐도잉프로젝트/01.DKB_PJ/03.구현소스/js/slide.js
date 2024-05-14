@@ -58,7 +58,7 @@ export default function slideFn() {
     기능: 로딩 후 버튼 이벤트 및 기능구현
 ******************************************/
   function loadFn() {
-    console.log("로딩완료!");
+    // console.log("로딩완료!");
 
     // 이동버튼 대상: .abtn
     const abtn = qsa(".abtn");

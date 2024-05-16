@@ -346,8 +346,9 @@
     background-color: #000;
     color: #fff;
     z-index: 999999;
-    overflow: hidden;
+    overflow: auto;
     display: none;
+    
 }
 .sub-cont a{
     color: #fff;
@@ -379,4 +380,5 @@
 .sub-item{
     font-size: 3rem;
     padding: 7vw;
+    
 }

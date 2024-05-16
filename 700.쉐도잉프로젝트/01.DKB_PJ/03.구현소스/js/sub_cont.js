@@ -65,34 +65,47 @@ export default function showSubBox() {
 
     console.log("검색결과:", selData);
 
-    // 서브박스에 내용 넣기
-    // 제이쿼리는 innerHTML 할당대신
-    // html() 메서드를 사용한다
-    subContBox
-      .html(
-        // 1. 미리보기 출력
-        db == "previewData"
-          ? `
+
+    // 이미지의 개수를 반영한 배열을 임의로 만들고 필요한 경우 이배열로 map()을 돌려서 코드를 생성한다
+    // 우선 빈배열을 만든다
+    let iarr = [];
+    // 현장포토일때 사용
+    if (db == "liveData") {
+      for (let i = 0; i < selData.imgName[1]; i++) {
+        iarr[i] = "";
+      }
+      console.log("이미지map을 위한 배열:",iarr);
+    }
+      // 서브박스에 내용 넣기
+      // 제이쿼리는 innerHTML 할당대신
+      // html() 메서드를 사용한다
+      subContBox
+        .html(
+          // 1. 미리보기 출력
+          db == "previewData"
+            ? `
         <button class="cbtn">×</button>
         <div class="sub-inbox inbox">
             <h1>${selData.title}</h1>
             <div class="sub-item">${selData.story}</div>
         </div>
         `
-          : // 2.현장포토 출력
-          db == "liveData"
-          ? `
+            : // 2.현장포토 출력
+            db == "liveData"
+            ? `
         <button class="cbtn">×</button>
         <div class="sub-inbox inbox">
             <h1>현장포토 : ${selData.title}</h1>
             <div class="sub-item">
-              <img src="./images/live_photo/${selData.imgName}.jpg" alt="${selData.title}" />
+            ${iarr.map((v,i)=>`
+            <img src="./images/live_photo/${selData.imgName[0]}/${i+1}.jpg" alt="${selData.title}" />
+            `).join('')}
             </div>
         </div>
         `
-          : // 3.대표 포스터 출력
-          db == "posterData"
-          ? `
+            : // 3.대표 포스터 출력
+            db == "posterData"
+            ? `
         <button class="cbtn">×</button>
         <div class="sub-inbox inbox">
             <h1>대표 포스터 : ${selData.title}</h1>
@@ -101,8 +114,8 @@ export default function showSubBox() {
             </div>
         </div>
         `
-          : db == "clipData"
-          ? `
+            : db == "clipData"
+            ? `
           <button class="cbtn">×</button>
         <div class="sub-inbox inbox">
             <h1>클립 영상 : ${selData.title}</h1>
@@ -111,13 +124,13 @@ export default function showSubBox() {
               <h2>${selData.subtit}</h2>
             </div>
         </div>`
-          : `
+            : `
         <button class="cbtn">×</button>
         <div class="sub-inbox inbox">
           <h1>db 정보 확인필요</h1>
         </div>`
-      )
-      .show();
+        )
+        .show();
     // show() 는 display를 보여주는 메서드
     // hide() 는 display를 숨기는 메서드
     // toggle() 은 display를 토글하는 메서드

@@ -87,7 +87,7 @@ introMv.onclick = () => {
 
   // 2. 화면출력하기 -> map() 으로 한번에 출력하자
   previewBox.innerHTML = `
-    <ul class="fx-box">
+    <ul class="fx-box" data-db="previewData">
       ${pData
         .map(
           (v) => `
@@ -111,27 +111,42 @@ introMv.onclick = () => {
   // 구조: ul>li>figure>img+figcaption
   // 8개의 데이터를 html 구성하여 넣는다
   // html 코드변수
-  let hcode = `<ul>`;
+  // let hcode = `<ul>`;
 
   // li구성을 hcode변수에 대입연산자로 할당함
   // liveData 배열은 총8개임 모두 돌기를 셋팅하기
-  lvData.forEach((v) => {
-    hcode += `
-        <li>
-            <figure>
-                <img src="./images/live_photo/${v.imgName}.jpg" alt="${v.title}">
-                <figcaption>${v.title}</figcaption>
-            </figure>
-        </li>
-    `;
-  }); /// forEach ////////
-  hcode += `</ul>`;
+  // lvData.forEach((v) => {
+  //   hcode += `
+  //       <li>
+  //           <figure>
+  //               <img src="./images/live_photo/${v.imgName}.jpg" alt="${v.title}">
+  //               <figcaption>${v.title}</figcaption>
+  //           </figure>
+  //       </li>
+  //   `;
+  // }); /// forEach ////////
+  // hcode += `</ul>`;
   // 데이터 확인
   // console.log(hcode);
   // console.log('대상',previewBox,'미리보기 data:', pData);
 
-  // 2. 화면출력하기 ////
-  liveBox.innerHTML = hcode;
+  // 2. 화면출력하기 -> map()으로 데이터 생성하기 ////
+  liveBox.innerHTML = `
+  <ul data-db="liveData">
+    ${lvData
+      .map(
+        (v) => `
+      <li data-idx="${v.idx}">
+        <figure>
+          <img src="./images/live_photo/${v.imgName}.jpg" alt="${v.title}">
+          <figcaption>${v.title}</figcaption>
+        </figure>
+      </li>
+    `
+      )
+      .join("")}
+    </ul>
+    `;
 })(); // 미리보기 코드랩핑구역 종료
 
 // 대표이미지 구역
@@ -144,26 +159,39 @@ introMv.onclick = () => {
   // 구조: ul>li>figure>img+figcaption
   // 8개의 데이터를 html 구성하여 넣는다
   // html 코드변수
-  let hcode = `<ul>`;
+  // let hcode = `<ul>`;
 
   // li구성을 hcode변수에 대입연산자로 할당함
-  pData.forEach((v) => {
-    hcode += `
-        <li>
-            <figure>
-                <img src="./images/poster_img/${v.imgName}.jpg" alt="${v.title}">
-                <figcaption>${v.title}</figcaption>
-            </figure>
-        </li>
-    `;
-  }); /// forEach ////////
-  hcode += `</ul>`;
+  // pData.forEach((v) => {
+  //   hcode += `
+  //       <li>
+  //           <figure>
+  //               <img src="./images/poster_img/${v.imgName}.jpg" alt="${v.title}">
+  //               <figcaption>${v.title}</figcaption>
+  //           </figure>
+  //       </li>
+  //   `;
+  // }); /// forEach ////////
+  // hcode += `</ul>`;
   // 데이터 확인
   // console.log(hcode);
   // console.log('대상',previewBox,'미리보기 data:', pData);
 
   // 2. 화면출력하기 ////
-  posterBox.innerHTML = hcode;
+  posterBox.innerHTML = `
+  <ul data-db="posterData">
+    ${pData.map((v) => 
+      `
+      <li data-idx="${v.idx}">
+        <figure>
+          <img src="./images/poster_img/${v.imgName}.jpg" alt="${v.title}">
+          <figcaption>${v.title}</figcaption>
+        </figure>
+      </li>
+      `
+    ).join("")}
+  </ul>
+  `;
 })(); // 미리보기 코드랩핑구역 종료//
 
 // 5.최신동영상 파트 데이터 태그 구성하여 화면 출력하기 //
@@ -172,30 +200,54 @@ introMv.onclick = () => {
   // 5-1. 변경대상: .clip-box
   const clipBox = myFn.qs(".clip-box");
 
+  // 데이터 연결 변수할당
+  const clipData = dkbData.clipData;
+
   //5-2. 생성코드 변수
-  let hcode = `<ul class="slide">`;
+  // let hcode = `<ul class="slide">`;
   // 데이터만큼 순회하여 li코드 만들기 //
   // 데이터: dkbData.clipData
-  dkbData.clipData.forEach((v) => {
-    hcode += `
-      <li>
-        <div class="clip-mv-box">
-          <img
-            src="./images/clip_img/${v.idx}.jpg"
-            alt="${v.subtit}′"
-          />
-        </div>
-        <h4>
-          ${v.subtit}
-        </h4>
-        <h3>${v.title}</h3>
-      </li>
-    `;
-  }); //// forEach///
-  hcode += `</ul>`;
+  // dkbData.clipData.forEach((v) => {
+  //   hcode += `
+  //     <li>
+  //       <div class="clip-mv-box">
+  //         <img
+  //           src="./images/clip_img/${v.idx}.jpg"
+  //           alt="${v.subtit}′"
+  //         />
+  //       </div>
+  //       <h4>
+  //         ${v.subtit}
+  //       </h4>
+  //       <h3>${v.title}</h3>
+  //     </li>
+  //   `;
+  // }); //// forEach///
+  // hcode += `</ul>`;
 
   // 5-3. 화면출력하기
-  clipBox.innerHTML = hcode;
+  clipBox.innerHTML = `
+    <ul class="slide" data-db="clipData">
+      ${clipData
+        .map((v) => 
+          `
+        <li data-idx="${v.idx}">
+          <div class="clip-mv-box">
+            <img
+            src="./images/clip_img/${v.idx}.jpg"
+            alt="${v.subtit}′"
+            />
+          </div>
+          <h4>
+          ${v.subtit} 
+          </h4>
+          <h3>${v.title}</h3>
+        </li>
+        `
+        )
+        .join("")}
+    </ul>
+  `;
 })(); // 코드 랩핑구역 종료
 
 // 드래그 슬라이드 태그 구성 후 호출하기

@@ -90,7 +90,14 @@ function makeMenu() {
       .join("")}
     </ul>
 `;
+// 햄버거 버튼 클릭시 .top-area에 클래스 넣기
+$(".ham").click(()=>{
+  $(".top-area").toggleClass("on");
+  // addClass()/ removeClass()/ toggleClass()
+  // -js의 classList객체 하위 매서드와 유사
+})
 }
+
 
 // 콤보박스 바인딩 함수 //
 

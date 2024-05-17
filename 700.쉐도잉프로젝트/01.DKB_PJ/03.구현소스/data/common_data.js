@@ -29,8 +29,9 @@ const comData = {
             </nav>
             <!-- GNB메뉴 -->
             <nav class="gnb"></nav>
-          </div>
-        </div>
+            </div>
+            </div>
+            <button class="ham"></button>
       </header>
     `,
   // 2. 하단영역 코드

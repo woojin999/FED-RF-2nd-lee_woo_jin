@@ -346,7 +346,7 @@
     background-color: #000;
     color: #fff;
     z-index: 999999;
-    overflow: auto;
+    overflow: hidden;
     display: none;
     
 }
@@ -367,7 +367,7 @@
 }
 /* 서브 내부박스 */
 .sub-inbox{
-    outline: 2px dashed yellow;
+    /* outline: 2px dashed yellow; */
     min-height: 100vh;
 }
 /* 제목박스 */
@@ -380,5 +380,26 @@
 .sub-item{
     font-size: 3rem;
     padding: 7vw;
-    
+    text-align: center;
+    height: 50vh;
+    /* outline: 1px solid yellow; */
+    overflow: auto;
+}
+/* 내용박스 하위 이미지 */
+.sub-item img{
+  max-width: 100%;
+}
+.sub-item iframe{
+  width: 100%;
+  aspect-ratio: 2/1.1;
+  border: none;
+}
+
+@media screen and (max-width:800px) {
+  .sub-cont h1{
+    font-size: 5vw;
+  }
+  .sub-item{
+    font-size: 4vw;
+  }
 }

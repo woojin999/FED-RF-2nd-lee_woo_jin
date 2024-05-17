@@ -16,7 +16,8 @@ function MainComponent() {
   // [ 후크 상태관리 변수 셋팅! ] //
   // 1. 리스트 / 상세보기 전환용 상태관리변수
   const [viewList, setViewList] = React.useState(true);
-
+  // 2. 상품 데이터 인덱스값 상태관리변수
+  const [idx, setIdx] = React.useState(0);
   /****************************************** 
         [ 코드구성 ]
         1. 타이틀 : h1.tit
@@ -49,7 +50,11 @@ function MainComponent() {
       <div className="gwrap">
         {
           // 상태관리변수 viewList값이 true이면 리스트보기
-          viewList ? <GoodsList viewDetail={setViewList} /> : <GoodsDetail backList={setViewList}/>
+          viewList ? (
+            <GoodsList viewDetail={setViewList} updateIdx={setIdx}/>
+          ) : (
+            <GoodsDetail backList={setViewList} gNo={idx} />
+          )
           // false이면 상품 상세리스트 보기
         }
       </div>
@@ -58,8 +63,9 @@ function MainComponent() {
 } ///////////// MainComponent 컴포넌트 //////
 
 // [ 상품리스트 서브 컴포넌트 : GoodsList ] //
-function GoodsList({ viewDetail }) {
+function GoodsList({ viewDetail, updateIdx }) {
   // viewDetail - 부모컴포넌트가 전달해준 상태변수 backList를 업데이트하는 setViewList메서드
+  // updateIdx - 부모컴포넌트의 setIdx 상태관리변수의 메서드
   // 코드리턴구역/////
   return (
     <ul>
@@ -77,6 +83,8 @@ function GoodsList({ viewDetail }) {
                 // 상태변수 backList 업데이트
                 // setViewList메서드가 viewDetail로 들어옴
                 viewDetail(false);
+                // setIdx메서드가 updateIdx로 들어옴
+                updateIdx(i);
               }}
             >
               <ol className="glist">
@@ -95,8 +103,11 @@ function GoodsList({ viewDetail }) {
 } /// GoodsList 컴포넌트 ///
 
 // [ 상품 상세보기 서브컴포넌트 : GoodsDetail ] ////
-function GoodsDetail({backList}) {
-  // backList - 부모컴포넌트가 전달해준 상태변수 backList를 업데이트하는 setViewList메서드
+function GoodsDetail({ backList, gNo }) {
+  // backList - 부모컴포넌트가 전달해준 상태변수
+  // (backList를 업데이트하는 setViewList메서드)
+  // gNo - 상품 데이터 배열순번
+  // (idx 상태관리변수가 전달됨 - 이 값 변경시 컴포넌트 변경됨)
   // 코드리턴구역 ////
   return (
     <ol
@@ -104,31 +115,38 @@ function GoodsDetail({backList}) {
     >
       <li>
         <img
-          src="./images/vans/vans_1.jpg"
+          src={"./images/vans/vans_" + guData[gNo].idx + ".jpg"}
           alt="반스신발"
           style={{ maxWidth: "100%" }}
         />
       </li>
       <li style={{ lineHeight: "2", padding: "10px", textAlign: "left" }}>
-        상품명 : {guData[0].gname}
+        상품명 : {guData[gNo].gname}
         <br />
-        가격 : {guData[0].gprice} <br />
-        소재 : {guData[0].소재} <br />
-        색상 : {guData[0].색상} <br />
-        치수 : {guData[0].치수} <br />
-        제조자/수입자 : {guData[0]["제조자/수입자"]}
+        가격 : {guData[gNo].gprice} <br />
+        소재 : {guData[gNo].소재} <br />
+        색상 : {guData[gNo].색상} <br />
+        치수 : {guData[gNo].치수} <br />
+        제조자/수입자 : {guData[gNo]["제조자/수입자"]}
         <br />
-        제조국 : {guData[0].제조국}
+        제조국 : {guData[gNo].제조국}
         <br />
-        제조연월 : {guData[0].제조연월}
+        제조연월 : {guData[gNo].제조연월}
         <br />
         A/S 책임자와 전화번호 : <br />
-        {guData[0]["A/S 책임자와 전화번호"]}
+        {guData[gNo]["A/S 책임자와 전화번호"]}
         <br />
-        Model : {guData[0].Model}
+        Model : {guData[gNo].Model}
         <br />
         <div className="btnbx" style={{ textAlign: "right", padding: "15px" }}>
-          <button onClick={()=>{backList(true)}} style={{ fontSize: "24px" }}>리스트로 가기</button>
+          <button
+            onClick={() => {
+              backList(true);
+            }}
+            style={{ fontSize: "24px" }}
+          >
+            리스트로 가기
+          </button>
         </div>
       </li>
     </ol>

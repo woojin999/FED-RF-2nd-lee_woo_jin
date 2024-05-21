@@ -198,9 +198,9 @@ body * {
   background-color: #f9f9f9;
 }
 
-/* 보그 Ph 공통 CSS- common.css */
-/* 상단, 하단 공통 모듈 cSS */
-/****************************** 1.상단영역 ******************************/
+/* 보그 PJ 공통 CSS - common.css */
+/* 상단, 하단 공통 모듈 CSS */
+/****************** 1.상단영역 ******************/
 .top-area {
   /* 최소높이 */
   min-height: 206px;
@@ -233,8 +233,8 @@ body * {
   /* 카카오스토리 배경이미지 넣기 */
 }
 .tmenu .sns a:hover {
-  opacity: 0.7;
-  color: lightblue;
+  opacity: 0.8;
+  color: hotpink;
 }
 .tmenu .sns a.fi-twitter {
   font-size: 13px;
@@ -242,14 +242,11 @@ body * {
 .tmenu .sns a.fi-youtube-play {
   font-size: 11px;
 }
-.tmenu .sns a.fi-laptop {
-  font-size: 14px;
-}
-.tmenu .sns a.fi-camera {
-  font-size: 14px;
-}
 .tmenu .sns a.cas {
   background: url(../images/sns_kakao.png) no-repeat center/auto 100%;
+}
+.tmenu .sns a.fi-camera, .tmenu .sns a.fi-laptop {
+  font-size: 14px;
 }
 .tmenu .sideMenu .smbx {
   /* 플렉스박스 */
@@ -271,7 +268,7 @@ body * {
   color: #747474;
 }
 .tmenu .sideMenu .smbx > li:first-child {
-  border-right: 5px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
 }
 .tmenu .sideMenu .smbx > li:first-child > a {
   cursor: text;
@@ -295,7 +292,7 @@ body * {
   color: #747474;
 }
 .tmenu .sideMenu .smbx > li .smsub a:hover {
-  background-color: #fafafa;
+  background-color: pink;
   color: #333;
 }
 .tmenu .sideMenu .smbx > li:hover .smsub {
@@ -303,7 +300,6 @@ body * {
   height: auto;
 }
 
-/* 1-2.로고박스 */
 .logo {
   height: 104px;
   margin-bottom: 10px;
@@ -314,6 +310,7 @@ body * {
   min-height: 46px;
   padding: 0 30px;
   /* GNB ul박스 */
+  /* GNB a요소 */
 }
 .gnb ul {
   /* 플렉스박스 */
@@ -323,29 +320,39 @@ body * {
   /* 플렉스 줄바꿈설정 */
   flex-wrap: wrap;
   /* 사이간격 속성 -> gap: 위아래 양쪽 (flex에서 사용함)
-          -> 숫자를 하나만 쓰면 양방향이 모두같은수치 셋팅 */
+        -> 숫자를 하나만 쓰면 양방향이 모두같은수치 셋팅 */
   gap: 0 45px;
   /* GNB li 리스트 */
 }
 .gnb ul li {
   /* padding-right: 45px; 
-        -> 사이간격을 li에 패딩으로 안주고
-        부모요소인 flex박스에서 gap속성으로 준다! */
+    -> 사이간격을 li에 패딩으로 안주고
+    부모요소인 flex박스에서 gap속성으로 준다! */
   font-family: "Roboto Condensed", sans-serif;
   line-height: 40px;
 }
-.gnb ul li:last-child {
+.gnb ul li:last-child i {
   font-weight: bold;
-  padding-top: 2px;
+  cursor: pointer;
+}
+.gnb ul li:last-child i:hover {
+  color: red;
+}
+.gnb a {
+  /* 트랜지션 */
+  transition: color 0.2s linear;
+}
+.gnb a:hover {
+  color: red;
 }
 
-/****************************** 2.메인영역 ******************************/
+/****************** 2.메인영역 ******************/
 .main-area {
-  /* 최소높이 */
+  /* 최소높이 : 컨텐츠가 작을 경우대비 */
   min-height: 600px;
 }
 
-/****************************** 3.하단영역 ******************************/
+/****************** 3.하단영역 ******************/
 .footer-area {
   /* 최소높이 */
   min-height: 285px;

@@ -173,56 +173,99 @@ function bindData() {
     </table>
     `;
 
-    // 4. 지우기 버튼 셋팅하기 
-    mFn.qsa(".del-link a").forEach(ele=>{
-        ele.onclick = (e) => {
-            // 1. 기본이동막기
-            e.preventDefault();
-            // 2. 지울 순번속성(data-idx) 읽어오기
-            let idx = ele.getAttribute("data-idx");
-            // 3. 로컬쓰 읽어와서 파싱하기
-            let localData = JSON.parse(localStorage.getItem("minfo"));
+  // 4. 지우기 버튼 셋팅하기
+  mFn.qsa(".del-link a").forEach((ele) => {
+    ele.onclick = (e) => {
+      // 1. 기본이동막기
+      e.preventDefault();
+      // 2. 지울 순번속성(data-idx) 읽어오기
+      let idx = ele.getAttribute("data-idx");
+      // 3. 로컬쓰 읽어와서 파싱하기
+      let localData = JSON.parse(localStorage.getItem("minfo"));
 
-            console.log(idx,localData);
+      console.log(idx, localData);
 
-            // 4. 메모리에 있는 배열값 지우기
-            // 배열.splice(순번,개수)
-            localData.splice(idx,1) 
-            
-            // 5. 배열값 로컬쓰에 반영하기
-            localStorage.setItem("minfo",JSON.stringify(localData));
+      // 4. 메모리에 있는 배열값 지우기
+      // 배열.splice(순번,개수)
+      localData.splice(idx, 1);
 
-            // 6. 화면출력함수 호출
-            bindData();
-        }; //click//
-    }); // forEach ///
+      // 5. 배열값 로컬쓰에 반영하기
+      localStorage.setItem("minfo", JSON.stringify(localData));
+
+      // 6. 화면출력함수 호출
+      bindData();
+    }; //click//
+  }); // forEach ///
 } ///// bindData ////////////
 
-// 게시판 최초호출
-bindData();
+// 게시판 최초호출 : 로컬쓰 minfo 존재여부에 따라 처리
+if (localStorage.getItem("minfo")) {
+  bindData();
+} else {
+  makeObj();
+}
 
 //// 게시판 입력 버튼 클릭시 구현하기
 mFn.qs("#sbtn").onclick = () => {
-    
-    // 어디에 무엇을 입력해야하나
-    // 로컬쓰에 제목,내용을 입력한다
-    
-    // 1. 로컬쓰 데이터 읽어와서 배열로 변환
-    const localData = JSON.parse(localStorage.getItem("minfo"));
-    console.log("입력",localData);
+  // 어디에 무엇을 입력해야하나
+  // 로컬쓰에 제목,내용을 입력한다
 
-    // 2. 입력할 데이터 객체형식으로 배열에 넣기
-    // 배열.push({객체})
-    localData.push({
-      idx: localData.length + 1,
-      tit: mFn.qs("#tit").value,
-      cont: mFn.qs("#cont").value,
-    });
+  // 1. 로컬쓰 데이터 읽어와서 배열로 변환
+  const localData = JSON.parse(localStorage.getItem("minfo"));
+  console.log("입력", localData);
 
-    // 3.배열 데이터를 문자화하여 로컬쓰에 입력
-    localStorage.setItem("minfo",JSON.stringify(localData))
+  // 2. 입력값이 비었으면 돌려보내기
+  // trim() - 앞뒤 공백 제거 메서드
+  if (mFn.qs("#tit").value.trim() == "" || mFn.qs("#cont").value.trim() == "") {
+    alert("제목 또는 내용을 입력");
+    return;
+  } /// if /////////
 
-    // 4. 화면출력 함수 호출하기
-    bindData();
+  console.log(
+    "idx 값배열:",
+    localData.map((v) => v.idx)
+  );
 
+  // 3. 입력할 데이터 객체형식으로 배열에 넣기
+  // 배열.push({객체})
+  localData.push({
+    // 순번은 배열객체 idx 값중 최대값을 구하여 1더한다
+    // apply(보낼객체,배열) -? 보낼객체가 여기서는 null
+    idx:
+      Math.max.apply(
+        null,
+        localData.map((v) => v.idx)
+      ) + 1,
+    tit: mFn.qs("#tit").value,
+    cont: mFn.qs("#cont").value,
+  });
+
+  // 4.배열 데이터를 문자화하여 로컬쓰에 입력
+  localStorage.setItem("minfo", JSON.stringify(localData));
+
+  // 5. 화면출력 함수 호출하기
+  bindData();
 }; //// click 함수 //////////
+
+// CRUD /////////////////
+
+//// 수정기능 구현하기 ////////
+
+// 수정항목 선택박스 업데이트 함수 호출
+updateItemList();
+// 수정할 항목 업데이트 함수 ///
+function updateItemList() {
+  // 대상: 수정선택박스 - #sel
+  const selBox = mFn.qs("#sel");
+
+  // 데이터의 idx를 순회하며 option 만들기
+  const localData = JSON.parse(localStorage.getItem("minfo"));
+
+  selBox.innerHTML = localData
+    .map(
+      (v) => `
+    <option value="${v.idx}">${v.idx}</option>
+  `
+    )
+    .join("");
+} ////// updateItemList 함수 ///////

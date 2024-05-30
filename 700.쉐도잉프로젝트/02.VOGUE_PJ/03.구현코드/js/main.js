@@ -35,6 +35,9 @@ function Layout() {
         : menu == "member"
         ? "./css/member.css"
         : "./css/items.css";
+        
+        // 페이지 최상단이동코드
+        window.scrollTo(0,0)
   }, [menu]);
   // menu값이 :home인 경우 main.css
   // menu값이 gallery인 경우 gallery.css
@@ -51,9 +54,9 @@ function Layout() {
       ) : menu == "gallery" ? (
         <Gallery />
       ) : menu == "login" ? (
-        <Login />
+        <Login changeMenu={setMenu} />
       ) : menu == "member" ? (
-        <Member />
+        <Member changeMenu={setMenu} />
       ) : (
         <ItemsArea catName={menu} />
       )}

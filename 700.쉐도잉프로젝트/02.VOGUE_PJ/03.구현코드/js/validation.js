@@ -1,7 +1,6 @@
 // 회원가입 유효성 검사 JS
 
 export default function validateFn() {
-  console.log("D");
   /********************************************** 
     [ 사용자 입력폼 유효성 검사 ]
     - 이벤트 종류 : blur(포커스가 빠질때 발생)
@@ -14,8 +13,11 @@ export default function validateFn() {
     [id!=email2] !=은 같지않다(제이쿼리용문법)
 
 **********************************************/
-  $(`form.logF input[type=text][id!=email2],
-form.logF input[type=password]`).blur(function () {
+  // 대상요소 변수할당 //
+  const tgInput = `form.logF input[type=text][id!=email2],
+form.logF input[type=password]`;
+
+  $(tgInput).blur(function () {
     /****************************************** 
         1. 현재 블러가 발생한 요소의 아이디는?
     ******************************************/
@@ -43,7 +45,7 @@ form.logF input[type=password]`).blur(function () {
 
     // 공백 제거후 입력창에 반영시켜준다
     $(this).val(cv);
-    console.log("현재아이디:", cid, "\n현재값:", cv);
+    // console.log("현재아이디:", cid, "\n현재값:", cv);
     /************************************* 
         3. 빈값 여부 검사하기 (필수입력항목)
     *************************************/
@@ -52,6 +54,9 @@ form.logF input[type=password]`).blur(function () {
       $(this).siblings(".msg").text("필수입력");
       // 형제요소들 중 .msg인 요소에 글자를 출력함
       // 형제요소 선택은 siblings(특정이름)
+
+      // [불통과 pass변수 업데이트]
+      pass = false;
     } ///////if/////
     /**************************************** 
      4. 아이디일 경우 유효성 검사
@@ -65,9 +70,14 @@ form.logF input[type=password]`).blur(function () {
         // 아이디 검사 불통과시
         //false결과시 들어와야 하므로 Not(!) 연산자사용
         // 메시지 제거하기
-        $(this).siblings(".msg").text("영문자로 시작하는 6~20글자 영문자/숫자").removeClass("on");
-    } /// if /////
-    else{
+        $(this)
+          .siblings(".msg")
+          .text("영문자로 시작하는 6~20글자 영문자/숫자")
+          .removeClass("on");
+        // [불통과 pass변수 업데이트]
+        pass = false;
+      } /// if /////
+      else {
         // 아이디 검사 통과시
         // 1. DB에 조회하여 같은 아이디가 있다면
         // '이미 사용중인 아이디입니다' 와 같은 메시지출력
@@ -76,7 +86,6 @@ form.logF input[type=password]`).blur(function () {
         // 여기서 우선은 DB조회 못하므로 통과시 메시지로 출력
         $(this).siblings(".msg").text("사용할 수 있는 아이디").addClass("on");
         // 클래스 on을 넣으면 녹색글자
-        
       }
     } /// else if ////
     /**************************************** 
@@ -85,27 +94,264 @@ form.logF input[type=password]`).blur(function () {
      특수문자,문자,숫자포함 형태의 5~15자리
      ****************************************/
     else if (cid == "mpw") {
+      // 검사결과
+      // console.log("비번:",vReg(cv,cid));
+      if (!vReg(cv, cid)) {
+        // 비밀번호 검사 불통과시
+        //false결과시 들어와야 하므로 Not(!) 연산자사용
+        // 메시지 제거하기
+        $(this).siblings(".msg").text("특수문자,문자,숫자포함 형태의 5~15자리");
+
+        // [불통과 pass변수 업데이트]
+        pass = false;
+      } //if
+      else {
+        // 맞으면 메시지 삭제
+        $(this).siblings(".msg").empty();
+        // empty 내용 지우는 메서드
+      } ////////else///////////
     } /// else if ////
     /**************************************** 
      6. 비밀번호확인일 경우 유효성 검사
      - 검사기준: 비빌번호 항목과 일치여부
      ****************************************/
-    else if (cid == "mpw") {
+    else if (cid == "mpw2") {
+      if (cv != $("#mpw").val()) {
+        // 비밀번호확인 검사 불통과시
+        //false결과시 들어와야 하므로 Not(!) 연산자사용
+        // 메시지 제거하기
+        $(this).siblings(".msg").text("비밀번호가 일치하지 않습니다");
+        // [불통과 pass변수 업데이트]
+        pass = false;
+      } //if
+      else {
+        // 맞으면 메시지 삭제
+        $(this).siblings(".msg").empty();
+        // empty 내용 지우는 메서드
+      } ////////else///////////
     } /// else if ////
     /**************************************** 
      7. 이메일 유효성 검사
      - 검사기준: 이메일 형식에 맞는지 여부
      ****************************************/
     else if (cid == "email1") {
+      // 1. 이메일 주소 만들기: 앞주소@뒷주소
+      let comp =
+        eml1.val() + "@" + (seleml.val() == "free" ? eml2.val() : seleml.val());
+      // 이메일 뒷주소는 직접입력("free")이면 뒷주소 입력창
+      // 아니면 선택박스 option value 를 가져온다
+      // console.log("이메일:", comp);
+      // 2. 이메일 검사함수 호출하기
+      resEml(comp);
     } /// else if ////
     /**************************************** 
-     8. 모두 통과일 경우 메시지 지우기
-     ****************************************/
+       8. 모두 통과일 경우 메시지 지우기
+       ****************************************/
     else {
       // 메시지 제거하기
       $(this).siblings(".msg").text("");
-    }
+    } /// else//
   }); //// blur함수 //////
+
+  /******************************************** 
+    선택박스 변경시 이메일 검사하기
+    ______________________________
+
+    검사시점 : 선택박스에 change이벤트가 발생할때
+    제이쿼리 메서드 : change()
+    이벤트 대상 : #seleml -> seleml변수
+  ********************************************/
+
+  /////////// 이메일 관련 대상선정 /////////////
+  // 이메일 앞주소
+  const eml1 = $("#email1");
+  // 이메일 뒷주소
+  const eml2 = $("#email2");
+  // 이메일 뒷주소 선택박스
+  const seleml = $("#seleml");
+  ////////////////////////////////////////////
+
+  seleml.change(function () {
+    // 1. 선택박스 변경된 값 읽어오기
+    let cv = seleml.val();
+    // console.log("선택값:", cv);
+
+    // 2. 선택옵션별 분기
+    // 2-1."선택해주세요"일 경우
+    if (cv == "init") {
+      // 1. 메시지 출력
+      eml1.siblings(".msg").text("이메일 옵션선택 필수").removeClass("on");
+      // 2. 직접입력창 숨기기
+      eml2.fadeOut(300).val("");
+
+      // fadeOut(시간,이징,함수)
+      // -> 페이드 아웃효과 메서드
+    } /////// if : 선택해주세요 ///////
+
+    // 2-2.'직접입력'일 경우
+    else if (cv == "free") {
+      // 1. 직접 입력창 보이기 + 값지우기 + 포커스,
+      eml2.fadeIn(300).focus();
+      // fadeIn(시간,이징,함수)
+      // -> 페이드인 효과 메서드
+
+      // 2. 메시지 지우기
+      eml1.siblings(".msg").empty();
+    } ////// else if : 직접입력 //////
+
+    // 2-3. 기타 이메일주소 선택일 경우
+    else {
+      // 1. 직접입력창 숨기기
+      eml2.fadeOut(300).val("");
+      // 2. 메시지 지우기
+      eml1.siblings(".msg").empty();
+
+      // 3. 이메일 전체 주소 만들기
+      let comp = eml1.val() + "@" + cv;
+      // 이메일 뒷주소는 이미 cv에 담겨있음
+
+      // 4. 이메일 유효성 검사함수 호출
+      resEml(comp);
+    } ////// else : 기타 이메일주소 ////
+  }); ////// change ///////
+
+  /*********************************************** 
+    키보드 입력시 이메일 체크하기
+    _______________________________
+
+    - 키보드 관련 이벤트 : keypress, keyup, keydown
+    1. keypress : 키가 눌려졌을때
+    2. keyup : 키가 눌렸다가 올라올때
+    3. keydown : 키가 눌려져서 내려가 있을때
+    -> 과연 글자가 입력되는 순간은 어떤 키보드 이벤트를
+    사용해야할까? ->>> 
+
+    - 이벤트 대상 : #email1, #email2
+    -> 모든 이벤트함수와 연결하는 제이쿼리 메서드는?
+    on(이벤트명,함수)
+ ***********************************************/
+  $("#email1, #email2").on("keyup", function () {
+    // 1. 현재 이벤트 발생 대상 아이디 읽어오기
+    let cid = $(this).attr("id");
+    // console.log("입력창id:", cid);
+
+    // 2. 이메일 뒷주소 셋팅하기 (선택)
+    let backEml =
+      cid == "email2"
+        ? eml2.val()
+        : seleml.val() != "free"
+        ? seleml.val()
+        : eml2.val();
+
+    // 현재입력 아이디가 "email2" 면 직접 입력창을 읽고
+    //아니면 선택박스 값이 "free" 가 아닌경우 선택박스값 읽고
+    // 아니면 직접입력값을 뒷주소로 설정함
+
+    // 이메일 전체주소 만들기
+    let comp = eml1.val() + "@" + backEml;
+    // 이메일 유효성 검사함수 호출하기
+    resEml(comp);
+    // console.log($(this).val());
+  }); //////////////////////
+
+  /****************************************** 
+    함수명 : resEml (result Email)
+    기능 : 이메일 검사결과 처리
+  ******************************************/
+  const resEml = (comp) => {
+    // comp - 이메일주소
+    console.log("이메일주소:", comp);
+    // console.log('이메일검사결과:',vReg(comp,'eml'));
+
+    // 이메일 정규식 검사에 따른 메시지 보이기
+    if (vReg(comp, "eml")) {
+      eml1.siblings(".msg").text("적합한 이메일 형식입니다!").addClass("on");
+    } //////// if : 통과시 //////////
+    else {
+      eml1
+        .siblings(".msg")
+        .text("맞지않는 이메일 형식입니다!")
+        .removeClass("on");
+      // [불통과 pass변수 업데이트]
+      pass = false;
+    } //////// else : 불통과시 ////////
+  }; ///////////// resEml /////////////////
+
+  /************************************** 
+          비밀번호 글자 보이기/숨기기 셋팅
+    **************************************/
+  $(".eye")
+    .css({
+      textDecoration: "line-through",
+      opacity: 0.5,
+      cursor: "pointer",
+    })
+    .click((e) => {
+      // 투명도값 읽기
+      let opa = $(e.target).css("opacity");
+      // console.log(opa);
+      // 1. 글자 보이기 전환
+      $("#mpw").attr("type", opa == "0.5" ? "text" : "password");
+      // 2. CSS 디자인 전환
+      $(e.target).css({
+        textDecoration: opa == "0.5" ? "none" : "line-through",
+        opacity: opa == "0.5" ? "1" : "0.5",
+      });
+    }); /// click
+
+  /********************************************* 
+    가입하기(submit) 버튼 클릭시 처리하기 
+    __________________________________
+
+    - form요소 내부의 submit버튼을 클릭하면
+    기본적으로 form요소에 설정된 action속성값인
+    페이지로 전송된다! 전체검사를 위해 이를 중지해야함!
+    -> 중지방법은? event.preventDefault()!!!
+
+    전체검사의 원리 : 
+    전역변수 pass를 설정하여 true를 할당하고
+    검사중간에 불통과 사유발생시 false로 변경!
+    유효성 검사 통과여부를 판단한다!
+
+    검사방법 :
+    기존 이벤트 blur 이벤트를 강제로 발생시킨다!
+    이벤트를 강제로 발생시키는 제이쿼리 메서드는?
+    ->>> trigger(이벤트명)
+
+  *********************************************/
+  // 통과여부 변수(true/false값)
+  let pass = true;
+
+  $("#btnj").click((e) => {
+    // 1. 기본이동(서브밋) 막기
+    e.preventDefault();
+
+    // 2. pass통과 여부 변수에 true할당하기
+    pass = true;
+
+    // 3. 입력창 blur이벤트 강제발생하기
+    $(tgInput).trigger("blur");
+    console.log("통과여부:", pass);
+    // 4. 검사결과에 따라 메시지 보이기
+    if (pass) {
+      alert("회원가입을 축하드립니다! 짝짝짝!");
+      // 원래는 POST방식으로 DB에 회원가입정보를
+      // 전송하여 입력후 DB처리완료시 성공메시지나
+      // 로그인 페이지로 넘겨준다!
+
+      // 로그인 페이지로 리디렉션!
+      // location.href = 'login.html';
+
+      // 민감한 입력 데이터 페이지가 다시 돌아와서
+      // 보이면 안되기 때문에 히스토리를 지우는
+      // replace()로 이동한다!
+      // location.replace("login.html");
+    } //////// if : 통과시 ///////////
+    else {
+      ///// 불통과시 //////
+      alert("입력을 수정하세요~!");
+    } //////// else : 불통과시 //////
+  }); ///////// click /////////
 } ///validateFn //
 
 /*//////////////////////////////////////////////////////

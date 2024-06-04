@@ -6,6 +6,9 @@ import Main from "./components/pages/Main";
 import Character from "./components/pages/Character";
 import Comics from "./components/pages/Comics";
 
+// 전체 공통 css 불러오기
+import "../src/css/index.scss";
+
 /********************************************* 
     [ 리액트 라우터 ]
     -> 컴포넌트를 연결하여 특정 이벤트에 모듈을

@@ -42,8 +42,7 @@ export default function TopArea() {
                       <ol>
                         {v.sub.map((v, i) => (
                           <li key={i}>
-                            <Link to={v.link} />
-                            {v.txt}
+                            <Link to={v.link}>{v.txt}</Link>
                           </li>
                         ))}
                       </ol>

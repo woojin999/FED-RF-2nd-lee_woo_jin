@@ -14,6 +14,8 @@ import Gallery from "./components/Gallery";
 import Login from "./components/Login";
 // 회원가입 모듈 불러오기
 import Member from "./components/Member";
+// 부드러운 스크롤 불러오기
+import { scrolled, setPos } from "./smoothScroll24";
 
 // [1] 메인 페이지 전체 레이아웃 로딩 컴포넌트 /////
 function Layout() {
@@ -35,9 +37,64 @@ function Layout() {
         : menu == "member"
         ? "./css/member.css"
         : "./css/items.css";
-        
-        // 페이지 최상단이동코드
-        window.scrollTo(0,0)
+
+    // 페이지 최상단이동코드
+    window.scrollTo(0, 0);
+
+    // [이벤트 해제는 removeEventListener()를 사용한다]
+    // 부드러운 스크롤 적용하기는 "home" 에서만 적용함
+    if (menu == "home") {
+      document.addEventListener("wheel", scrolled, { passive: false });
+    }
+    // "home"이 아닌 경우 모두 이벤트를 해제한다
+    else {
+      document.removeEventListener("wheel", scrolled, { passive: false });
+    }
+    ////////////////////
+
+    // 슬림적용 대상: #top-area
+    const topMenu = document.querySelector("#top-area");
+    // 상단이동 버튼 대상 : .tbtn
+    const tbtn = document.querySelector(".tbtn");
+    // 상단이동기능
+    tbtn.onclick = (e) => {
+      // 기본이동 막기
+      e.preventDefault();
+      // 상단 이동하기
+      setPos(0);
+      // 위치값 이동하기
+      window.scrollTo(0,0);
+    }; //// click /////
+
+    // 슬림메뉴 적용하기 : "home"에서만 적용
+    const chkSlim = () => {
+      // 스크롤 위치값 구하기
+      if (menu == "home") {
+        let scTop = window.scrollY;
+        // console.log("슬림 적용", scTop);
+        // 슬림메뉴 적용
+        if (scTop > 200) {
+          topMenu.classList.add("on");
+        } else {
+          topMenu.classList.remove("on");
+        }
+
+        // 상단이동 버튼 적용
+        if (scTop > 300) {
+          tbtn.classList.add("on");
+        } else {
+          tbtn.classList.remove("on");
+        }
+      }
+    }; //// chkSlim 함수 //
+    // 스크롤 이벤트 적용하기 : scroll이벤트
+    if (menu == "home") {
+      setPos(0);
+      window.addEventListener("scroll", chkSlim);
+    } else {
+      setPos(0);
+      window.removeEventListener("scroll", chkSlim);
+    }
   }, [menu]);
   // menu값이 :home인 경우 main.css
   // menu값이 gallery인 경우 gallery.css

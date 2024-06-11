@@ -128,14 +128,7 @@ export default function TopArea({ changeMenu }) {
           </ul>
         </nav>
 
-        {/* <!-- 모바일용 햄버거버튼 --> */}
-        {/* <!-- <a href="#" className="mobtn hbtn fi fi-nav-icon">
-          <span className="ir">GNB button</span>
-        </a> --> */}
-        {/* <!-- 모바일용 검색버튼 --> */}
-        {/* <!-- <a href="#" className="mobtn sbtn fi fi-search">
-          <span className="ir">search</span>
-        </a> --> */}
+        
       </header>
     </div>
   );

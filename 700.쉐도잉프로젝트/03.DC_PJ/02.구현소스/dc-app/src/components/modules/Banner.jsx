@@ -1,5 +1,6 @@
 import React from "react";
 
+
 // 배너 데이터
 import { banData } from "../data/banner";
 

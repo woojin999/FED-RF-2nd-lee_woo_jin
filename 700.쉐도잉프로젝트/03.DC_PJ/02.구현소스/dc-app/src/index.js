@@ -14,6 +14,7 @@ import Board from "./components/pages/Board";
 
 // 전체 공통 css 불러오기
 import "../src/css/index.scss";
+import CatDetail from "./components/pages/CatDetail";
 
 /********************************************* 
     [ 리액트 라우터 ]
@@ -73,6 +74,7 @@ export default function MainComponent() {
           <Route path="news" element={<News />}/>
           <Route path="video" element={<Video />}/>
           <Route path="board" element ={<Board />}/>
+          <Route path="detail" element={<CatDetail />}/>
         </Route>
         {/* Layout 루트 Route로 하위 Route를 감싼다! */}
       </Routes>

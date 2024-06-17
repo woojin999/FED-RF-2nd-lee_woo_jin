@@ -1,15 +1,28 @@
 // 상단영역 컴포넌트 //
 
 // GNB 데이터 불러오기
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { menu } from "../data/gnb";
 
 // 상단 영역 css 불러오기
 import "../../css/top_area.scss";
 import Logo from "../modules/Logo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function TopArea() {
-  //
+  // 이동함수
+  const goNav = useNavigate();
+  // 사용시 goNav(라우터주소,{전달값})
+  // 사용법: 반드시 useNavigate()메서드를 변수에 담아
+  // 이동할 라우터 주소를 쓰면 이동한다
+  // 예) goNav('/news') -> 뉴스페이지이동
+  // 예) goNav('/') -> 첫페이지이동
+  // 이동주소는 대소문자 구분없음!
+  // 슬래쉬 없이 써도 루트로 인식함
+  // 빈값이어도 루트로 이동
+
+  //코드리턴구역
   return (
     <>
       {/* 1.상단영역 */}
@@ -21,9 +34,18 @@ export default function TopArea() {
           <ul>
             {/* 1. 로고 컴포넌트 */}
             <li>
-              <Link to="/">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goNav("/");
+                }}
+              >
                 <Logo logoStyle="top" />
-              </Link>
+              </a>
+              {/* <Link to="/">
+                <Logo logoStyle="top" />
+              </Link> */}
             </li>
             {/* 2. GNB메뉴 데이터 배열로 만들기 */}
             {menu.map((v, i) => (
@@ -53,6 +75,30 @@ export default function TopArea() {
                 }
               </li>
             ))}
+            {/* 3. 검색, 회원가입, 로그인 링크 */}
+            <li
+              style={{
+                marginLeft: "auto",
+                marginRight: "25px",
+              }}
+            >
+              {/* 검색입력박스 */}
+              <div className="searchingGnb" style={{ display: "block" }}>
+                {/* 검색버튼 돋보기 아이콘 */}
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="schbtnGnb"
+                  title="Open search"
+                />
+                {/* 입력창 */}
+                <input
+                  type="text"
+                  name="schinGnb"
+                  id="schinGnb"
+                  placeholder="Filter by keyword"
+                />
+              </div>
+            </li>
           </ul>
         </nav>
       </header>

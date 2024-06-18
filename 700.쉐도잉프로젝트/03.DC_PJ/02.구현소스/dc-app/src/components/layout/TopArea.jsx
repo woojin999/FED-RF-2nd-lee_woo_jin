@@ -9,6 +9,7 @@ import "../../css/top_area.scss";
 import Logo from "../modules/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import $ from "jquery";
 
 export default function TopArea() {
   // 이동함수
@@ -21,6 +22,44 @@ export default function TopArea() {
   // 이동주소는 대소문자 구분없음!
   // 슬래쉬 없이 써도 루트로 인식함
   // 빈값이어도 루트로 이동
+
+  // 검색 관련 함수들 ///
+  // 1. 검색창 보이기 함수
+  const showSearch = (e) => {
+    // 기본기능 막기
+    e.preventDefault();
+    // 1. 검색창 보이기
+    $(".searchingGnb").show();
+    // show() display를 보이게
+    // 2. 입력창에 포커스 보내기
+    $("#schinGnb").focus();
+  }; /// showSearch 함수 ////
+
+  // 2. 검색창에 엔터키 누르면 검색함수 호출
+  const enterKey = (e) => {
+    // e.keyCode는 숫자, e.key문자로 리턴함
+    // console.log(e.key,e.keyCode);
+    if (e.key == "Enter") {
+      // 입력창의 입력값 읽어오기 : val() 사용
+      let txt = $(e.target).val().trim();
+      // console.log(txt);
+      // 빈값이 아니면 검색함수 호출(검색어 전달)
+      if (txt != '') {
+        // 입력창 비우고 부모박스 닫기
+        $(e.target).val("").parent().hide();
+        // 검색 보내기
+        goSearch(txt);
+      } // if //
+    } /// if ///
+  }; //// enterKey ///
+
+  // 3. 검색페이지로 검색어와 함께 이동하기함수
+  const goSearch = (txt) => {
+    console.log("나는 검색하러 간다",txt);
+    // 라우터 이동함수로 이동
+    // 네이게이트메서드(라우터주소,{state:{보낼객체}})
+    goNav("search",{state:{keyword:txt}})
+  }; /// goSearch ///
 
   //코드리턴구역
   return (
@@ -83,7 +122,7 @@ export default function TopArea() {
               }}
             >
               {/* 검색입력박스 */}
-              <div className="searchingGnb" style={{ display: "block" }}>
+              <div className="searchingGnb">
                 {/* 검색버튼 돋보기 아이콘 */}
                 <FontAwesomeIcon
                   icon={faSearch}
@@ -96,8 +135,13 @@ export default function TopArea() {
                   name="schinGnb"
                   id="schinGnb"
                   placeholder="Filter by keyword"
+                  onKeyUp={enterKey}
                 />
               </div>
+              {/* 검색기능링크 - 클릭시 검색창보이기 */}
+              <a href="#" onClick={showSearch}>
+                <FontAwesomeIcon icon={faSearch} />
+              </a>
             </li>
           </ul>
         </nav>

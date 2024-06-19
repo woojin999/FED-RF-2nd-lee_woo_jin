@@ -2,6 +2,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import Banner from "../modules/Banner";
 import FasionIntro from "../modules/FasionIntro";
+import $ from "jquery";
 
 // 자동휠 함수 불러오기
 import * as wFn from "../../js/func/auto_wheel";
@@ -26,6 +27,11 @@ function MainCont(props) {
     // 컴포넌트 소멸시 이벤트 삭제하기
     return(()=>{
       console.log("메인 소멸");
+      // 1. 자동 휠함수 이벤트 삭제하기
+      window.removeEventListener("wheel", wFn.wheelFn);
+      // 2. 상단이동 이벤트 제거하기
+      
+      $("#logo a").off("click");
     });
   },[]);
   // useLayoutEffect(()=>{

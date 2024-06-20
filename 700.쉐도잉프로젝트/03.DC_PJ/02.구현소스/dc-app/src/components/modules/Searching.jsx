@@ -28,7 +28,10 @@ function Searching({ kword }) {
   const newList = catListData.filter((v) => {
     // 속성중 캐릭터 이름 중 검색(v.cname)
     // 검색어는 모두 영어일 경우 소문자 처리함
+    console.log(v);
+    // console.log(v.cname);
     let newVal = v.cname.toLocaleLowerCase();
+    console.log(newVal);
     // 전달받은 키워드도 소문자처리
     // ((중요!!)) 상태변수인 kw로 대체한다
     let key = kw.toLocaleLowerCase();

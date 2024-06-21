@@ -12,10 +12,11 @@ import $ from "jquery";
 // css 불러오기
 import "../../css/fashion.scss";
 import { SwiperBan } from "../plugin/SwiperBan";
+import SinSang from "../modules/SinSang";
 
-function Fashion({subCat}) {
-    // subCat - 서브 카테고리명
-    // 값: men / women / style
+function Fashion({ subCat }) {
+  // subCat - 서브 카테고리명
+  // 값: men / women / style
   // 컨텍스트 API사용하기
   const myCon = useContext(pCon);
   // 화면랜더링 실행구역
@@ -41,7 +42,6 @@ function Fashion({subCat}) {
       overflowX: "hidden",
     });
 
-   
     // 소멸자 구역 ///
     return () => {
       document.removeEventListener("wheel", scrolled, { passive: false });
@@ -60,14 +60,14 @@ function Fashion({subCat}) {
   }, []);
 
   // 화면 랜더링 코드구역
-  // 화면에 요소가 실제로 출력된 후 dom이벤트 
-  useEffect(()=>{
+  // 화면에 요소가 실제로 출력된 후 dom이벤트
+  useEffect(() => {
     // 로고클릭시 페이지 이동
     $("#logo a").on("click", (e) => {
       e.preventDefault();
       myCon.setPgName("main");
     }); ///// click /////
-  })
+  });
 
   // 코드리턴구역
   return (
@@ -77,7 +77,9 @@ function Fashion({subCat}) {
         <SwiperBan cat={subCat} />
       </section>
       {/* 2. 신상품영역 */}
-      <section id="c1" className="cont sc-ani c1"></section>
+      <section id="c1" className="cont sc-ani c1">
+        <SinSang cat={subCat} />
+      </section>
       {/* 2.5. 상세보기박스 */}
       <div className="bgbx"></div>
       {/* 3. 패럴랙스 영역 : 리액트용 패럴랙스 적용 */}

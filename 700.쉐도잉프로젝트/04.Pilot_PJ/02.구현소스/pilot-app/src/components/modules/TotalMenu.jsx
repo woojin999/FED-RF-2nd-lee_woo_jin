@@ -52,7 +52,9 @@ export function TotalMenu() {
           </dl>
           <dl>
             <dt>
-              <a href="#">WOMEN</a>
+              <a href="#" onClick={goSub}>
+                WOMEN
+              </a>
             </dt>
             <dd>
               <a href="#">T-SHIRT</a>
@@ -69,7 +71,9 @@ export function TotalMenu() {
           </dl>
           <dl>
             <dt>
-              <a href="#">STYLE</a>
+              <a href="#" onClick={goSub}>
+                STYLE
+              </a>
             </dt>
             <dd>
               <a href="#">COLLECTION</a>

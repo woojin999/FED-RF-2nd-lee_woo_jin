@@ -1,9 +1,10 @@
-// 상품에 오버시 상품정보를 보여주는 함수 /////
+// Pilot PJ - 신상 컴포넌트 함수 - sinsang_fn.js
 
 // 제이쿼리
 import $ from "jquery";
 
-const showInfo = (e) => {
+// 상품에 오버시 상품정보를 보여주는 함수 /////
+const showInfo = (e, selData) => {
   e.preventDefault();
   // 대상
   const tg = $(e.currentTarget);
@@ -49,7 +50,7 @@ const removeInfo = (e) => {
 };
 
 // [ 신상품 리스트 이동함수 ] //////
-const flowList = (ele) => {
+const flowList = (ele, lpos, callSts) => {
   // ele-움직일대상
   // console.log(ele);
   // 대상의 left값을 1씩 감소함
@@ -67,7 +68,8 @@ const flowList = (ele) => {
   ele.css({ left: lpos.current + "px" });
 
   // 재귀호출
-  if (callSts.current) setTimeout(() => flowList(ele), 40);
+  if (callSts.current) setTimeout(() => flowList(ele, lpos, callSts), 40);
 }; ////////// flowList ////////////
 
+// 내보내기 /////
 export { showInfo, removeInfo, flowList };

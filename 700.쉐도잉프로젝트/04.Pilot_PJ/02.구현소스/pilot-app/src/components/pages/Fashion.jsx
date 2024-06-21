@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 
 // 부드러운 스크롤 JS
 import { scrolled, setPos } from "../../js/func/smoothScroll24";
@@ -69,6 +69,20 @@ function Fashion({ subCat }) {
     }); ///// click /////
   });
 
+  // 후크 상태변수
+  const [item, setItem] = useState("m1");
+
+  // 신상컴포넌트에서 상세컴포넌트로 값을 전하기 위한
+  // 상태변수를 셋팅하여 함수로 이것을 변경하게 해준다!
+  // 프롭스 펑션다운~!!
+  const chgItem = (v) => {
+    console.log("상품정보:", v);
+    // 상태변수 업데이트
+    setItem(v);
+    // 상세박스 슬라이드 애니로 보이기
+    $(".bgbx").slideDown(400);
+  }; /////////// chgItem 함수 //////
+
   // 코드리턴구역
   return (
     <>
@@ -78,7 +92,7 @@ function Fashion({ subCat }) {
       </section>
       {/* 2. 신상품영역 */}
       <section id="c1" className="cont sc-ani c1">
-        <SinSang cat={subCat} />
+        <SinSang cat={subCat} chgItemFn={chgItem} />
       </section>
       {/* 2.5. 상세보기박스 */}
       <div className="bgbx"></div>

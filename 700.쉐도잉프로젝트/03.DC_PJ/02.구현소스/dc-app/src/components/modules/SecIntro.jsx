@@ -19,7 +19,10 @@ function SecIntro(props) {
           <div key={i}>
             {/* 1. 이미지박스 */}
             <div className="imbx">
-              <img src={v.isrc} alt={v.tit.split("^")[0]} />
+              <img
+                src={process.env.PUBLIC_URL + v.isrc}
+                alt={v.tit.split("^")[0]}
+              />
               {/* split()으로 자르면 배열이 된다 */}
             </div>
             {/* 2. 타이틀 박스 */}
@@ -29,7 +32,9 @@ function SecIntro(props) {
             </div>
             {/* 3. 버튼박스 */}
             <div className="btnbx">
-              <Link to={v.link}><button>{v.btn}</button></Link>
+              <Link to={v.link}>
+                <button>{v.btn}</button>
+              </Link>
             </div>
           </div>
         ))}

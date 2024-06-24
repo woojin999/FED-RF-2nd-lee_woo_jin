@@ -22,7 +22,7 @@ function SearchingCat({ dt }) {
                   /* state로 3가지 값을 넘겨준다 */
                   state={{ cname: v.cname, cdesc: v.cdesc, facts: v.facts }}
                 >
-                  <img src={v.tmsrc} alt={v.cname} />
+                  <img src={process.env.PUBLIC_URL + v.tmsrc} alt={v.cname} />
                   <h3>{v.cname}</h3>
                 </Link>
               </li>

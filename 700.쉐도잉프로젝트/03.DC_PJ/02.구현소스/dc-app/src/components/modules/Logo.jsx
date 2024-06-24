@@ -38,7 +38,11 @@ export default function Logo({logoStyle}){
   // 코드 리턴구역 /////
   return (
     <h1 style={myStyle[logoStyle]}>
-      <img src={isrc.logo} alt="logo" style={imgStyle[logoStyle]}/>
+      <img
+        src={process.env.PUBLIC_URL + isrc.logo}
+        alt="logo"
+        style={imgStyle[logoStyle]}
+      />
     </h1>
   );
 } //////////logo ///////////

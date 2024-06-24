@@ -36,7 +36,7 @@ function VidIntro({ catName, clsName }) {
         {/* 1. 비디오파트 */}
         <div className="vb1">
           <iframe
-            src={process.env.PUBLIC_URL + selData.vsrc}
+            src={selData.vsrc}
             title={selData.btit}
           ></iframe>
         </div>

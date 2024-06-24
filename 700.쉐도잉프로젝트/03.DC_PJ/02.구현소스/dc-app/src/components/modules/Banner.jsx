@@ -1,6 +1,5 @@
 import React from "react";
 
-
 // 배너 데이터
 import { banData } from "../data/banner";
 
@@ -11,13 +10,12 @@ import "jquery-ui-dist/jquery-ui";
 // 배너 SS
 import "../../css/banner.scss";
 // 배너 슬라이드 기능 함수
-import SlideFn from '../func/go_slide'
+import SlideFn from "../func/go_slide";
 
 function Banner({ catName }) {
   // catName 배너 데이터 카테고리이름
   // 슬라이드 기능 생성자 함수 인스턴스 생성하기
   const sldFn = new SlideFn();
-
 
   // 선택 데이터
   const selData = banData[catName];
@@ -29,7 +27,7 @@ function Banner({ catName }) {
         {selData.map((v, i) => (
           <li key={i}>
             <img
-              src={process.env.PUBLIC_URL+v.src}
+              src={process.env.PUBLIC_URL + v.src}
               alt={v.tit1 == "" ? "banner image" : v.tit1}
             />
             <section className="bantit">

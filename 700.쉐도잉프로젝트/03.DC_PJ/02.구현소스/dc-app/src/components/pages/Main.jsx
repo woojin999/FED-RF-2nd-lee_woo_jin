@@ -20,7 +20,10 @@ export default function Main() {
       <VidIntro catName={"main"} clsName={"off"}/>
       {/* 4. 비디오스와이프 컴포넌트 */}
       <VidSwipe catName={"main"}/>
+      {/* 5. 캐릭터 리스트 컴포넌트 */}
       <CatList />
+      {/* 6. 캐릭터 배너 컴포넌트 */}
+      <Banner catName={"CHARACTERS"}/>
     </>
   );
 } ///////Main ////

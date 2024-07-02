@@ -17,6 +17,7 @@ import SearchPage from "./components/pages/SearchPage";
 // 전체 공통 css 불러오기
 import "../src/css/index.scss";
 import Member from "./components/pages/Member";
+import Login from "./components/pages/Login";
 
 /********************************************* 
     [ 리액트 라우터 ]
@@ -82,6 +83,7 @@ export default function MainComponent() {
           <Route path="detail" element={<CatDetail />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="member" element={<Member/>}/>
+          <Route path="login" element={<Login />}/>
         </Route>
         {/* Layout 루트 Route로 하위 Route를 감싼다! */}
       </Routes>
@@ -102,7 +104,7 @@ const ScrollTop = () => {
   useEffect(() => {
     window.scrollTo(0,0);
     // 변경된 라우터 경로값 확인
-    console.log("라우터경로:",pathname);
+    // console.log("라우터경로:",pathname);
   }, [pathname]);
   // 의존성을 라우터 경로 변수로 설정한다
 

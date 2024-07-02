@@ -18,7 +18,7 @@ function VidIntro({ catName, clsName }) {
   const linkCode = (v) => {
     // *로 자른후 배열로 변환
     let data = v.split("*");
-    console.log(data);
+    // console.log(data);
     // 코드 리턴구역 /////
     return (
       <>

@@ -12,8 +12,6 @@
             background-clip: text;
             background-image: linear-gradient(to right, darkorchid,green,hotpink);
             -webkit-text-fill-color: transparent;
-            /* 줄바꿈 방지 */
-            /* white-space: nowrap; */
         }
         /*********************************************************
             [ 뷰포트 단위란? ]
@@ -36,7 +34,7 @@
             ___________________________________________________
 
             [ 뷰포트 단위의 종류 ]
-
+            
             1. vw (viewport width)
             - 화면의 가로크기를 기준한 %비율(0~100)
 
@@ -117,7 +115,7 @@
             /* 보이는 화면의 50% */
             width: 50vw;
             /* 10vw와 100px중 작은값출력! */
-            font-size: min(10vw,100px); /* 최대 100px */
+            font-size: min(10vw,100px);
             /* 
                 min(값들) 
                 -> 값들 중 작은값 출력
@@ -128,6 +126,7 @@
         }
         .vp1-3 {            
             /* 보이는 화면의 50% */
+            width: 50vw;
             /* 10vw와 50px중 큰값출력! */
             font-size: max(10vw,50px);
             /* 
@@ -140,12 +139,13 @@
         }
         .vp1-4 {
             /* 보이는 화면의 50% */
-            
+            width: 50vw;
             /* min과 max 를 중첩하여 내부에서는
             최소사이즈체크, 외부에서는 최대사이즈체크
             반대로 내부에서 최대사이즈체크, 외부에서
             최소사이즈체크로 바꿔도 됨! */
-            font-size: max(min(10vw,100px),50px);
+            font-size: 
+            max(min(10vw,100px),50px);
         }
         
         /* 2. vh단위 - 보이는 화면 세로폭기준 */
@@ -163,7 +163,7 @@
         /* 4. vmin단위 - 보이는 화면 가로,세로폭 중 작은것기준 */
         .vp4{
             width: 50vmin;
-            font-style: 10vmin;
+            font-size: 10vmin;
         }
         
 

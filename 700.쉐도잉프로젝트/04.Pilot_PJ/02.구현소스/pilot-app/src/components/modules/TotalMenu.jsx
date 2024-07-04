@@ -10,10 +10,11 @@ export function TotalMenu() {
 
   // 서브페이지 이동함수 //
   const goSub = (e) => {
-    // 1. 이동할 서브페이지명 : a요소의 글자를 소문자로
-    let pgName = e.target.innerText.toLowerCase();
-    // 2. 기본이동막기
+    // 1. 기본이동막기
     e.preventDefault();
+    // 2. 이동할 서브페이지명 : a요소의 글자를 소문자로
+    let pgName = e.target.innerText.toLowerCase();
+    pgName = pgName.replace(" ","-");
     // 3. 서브페이지 이동하기위해 상태변수업데이트
     myCon.setPgName(pgName);
     // 4. 햄버거 버튼 클릭이벤트 발생하여 전체 메뉴 닫기
@@ -25,7 +26,7 @@ export function TotalMenu() {
     <>
       <div className="mbox">
         <video
-          src="./images/disc2018.mp4"
+          src={process.env.PUBLIC_URL + "/images/disc2018.mp4"}
           loop="loop"
           muted="muted"
           className="bgm"
@@ -87,6 +88,14 @@ export function TotalMenu() {
             <dd>
               <a href="#">MAIN ITEM</a>
             </dd>
+          </dl>
+          <dl>
+            <dt>
+              <a href="#" onClick={goSub}>
+                ITEM LIST
+              </a>
+            </dt>
+            <dd></dd>
           </dl>
         </nav>
       </div>

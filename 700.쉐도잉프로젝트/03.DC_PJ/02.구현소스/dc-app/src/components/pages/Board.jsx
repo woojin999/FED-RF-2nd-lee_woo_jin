@@ -1,5 +1,5 @@
 // 보드페이지 컴포넌트 //
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 
 // 제이쿼리
 import $ from "jquery";
@@ -14,8 +14,14 @@ import "../../css/board_file.scss";
 // 로컬스토리지 확인 JS
 
 import { initBoardData } from "../func/board_fn";
+import { dCon } from "../modules/dCon";
 
 export default function Board() {
+  // 컨텍스트 사용하기
+  const myCon = useContext(dCon);
+  // 전역 로그인 상태 변수 확인하기(변수할당)
+  const sts = myCon.loginSts;
+  // console.log(sts);
   // 로컬스토리지 게시판 데이터 정보확인
   initBoardData();
 
@@ -31,7 +37,7 @@ export default function Board() {
   // 참조변수 //
   // [1] 전체 개수 - 매번 계산하지 않도록 참조변수로
   const totalCount = useRef(baseData.length);
-  console.log("전체 개수", totalCount);
+  // console.log("전체 개수", totalCount);
   // [2] 선택 데이터 저장
   const selRecord = useRef(null);
   // -> 특정 리스트 글 제목 클릭시 데이터 저장함
@@ -64,7 +70,7 @@ export default function Board() {
     let sNum = (pageNum - 1) * unitSize;
     // 끝번호 = (페이지번호-1) * 단위 수
     let eNum = pageNum * unitSize;
-    console.log("첫번호:", sNum, "/끝번호:", eNum);
+    // console.log("첫번호:", sNum, "/끝번호:", eNum);
     // 결과배열
     const selData = [];
 
@@ -75,7 +81,7 @@ export default function Board() {
       // 대상 배열값 추가
       selData.push(orgData[i]);
     } /// for ///
-    console.log(selData);
+    // console.log(selData);
 
     return selData.map((v, i) => (
       <tr key={i}>
@@ -118,7 +124,7 @@ export default function Board() {
       pagingCount++;
     }
 
-    console.log("페이징 개수:", pagingCount, totalCount.current % unitSize);
+    // console.log("페이징 개수:", pagingCount, totalCount.current % unitSize);
 
     let pgCode = [];
 
@@ -154,16 +160,79 @@ export default function Board() {
   const clickButton = (e) => {
     // 버튼 글자 읽기
     let btnText = e.target.innerText;
-    console.log(btnText);
+    // console.log(btnText);
     switch (btnText) {
       case "Write":
-        console.log("글써라!");
+        setMode("W");
         break;
       case "List":
         setMode("L");
         break;
+      // 글쓰기 모드일 경우 서브밋
+      case "Submit":
+        // console.log("서브밋", mode);
+        submitFn();
+        break;
     }
   }; /////clickButton
+
+  // 서브밋 처리함수 /////
+  const submitFn = () => {
+    // 제목 입력항목
+    let title = $(".subject").val().trim();
+    // 내용 입력항목
+    let cont = $(".content").val().trim();
+    // 1. 공통 유효성 검사
+    // 제목, 내용 모두 비었으면 리턴
+    if (title == "" || cont == "") {
+      alert("Insert title and content");
+      return; // 서브밋없이 함수 나가기
+    }
+
+    // 2. 글쓰기 서브밋 (mode=="W")
+    if (mode == "W") {
+      let today = new Date();
+      // yy-mm-dd 형식으로 구하기
+      // 제이슨 날짜형식 : toJSON()
+      // ISO 표준형식 : toISOString()
+      // 시간까지 나오므로 앞에 10자리만 가져감
+      // 문자열.substr(0,10)
+
+      // 글번호 만들기
+      // 전체 데이터중 idx만 모아서 배열만들기
+      let arrIdx = baseData.map(v=>parseInt(v.idx));
+      console.log(arrIdx);
+      // 최대값 찾기 : 스프레드 연산자로 배열 값만 넣음
+      let maxNum = Math.max(...arrIdx);
+      console.log(maxNum);
+
+      // 입력 데이터 객체형식으로 구성하기
+      let data = {
+        idx: maxNum + 1,
+        tit: title,
+        cont: cont,
+        att: "",
+        date: today.toJSON().substr(0, 10),
+        uid: JSON.parse(sts).uid,
+        unm: JSON.parse(sts).unm,
+        cnt: "0",
+      };
+      console.log("글쓰기 서브밋:", data);
+      //로컬스에 입력하기
+      // 1. 로컬스 파싱
+      let locals = localStorage.getItem("board-data");
+      locals = JSON.parse(locals);
+      // 2. 파싱배열에 push
+      locals.push(data);
+      // 3. 새배열을 문자화하여 로컬스에 넣기
+      localStorage.setItem("board-data",JSON.stringify(locals));
+
+      // 리스트로 돌아가기 -> 모드 변경 "L"
+      setMode("L");
+    }
+
+    // 3. 수정모드 서브밋 (mode == "M")
+  }; ////////////// submitFn //////
 
   // 코드 리턴구역 //
   return (
@@ -174,8 +243,13 @@ export default function Board() {
         mode == "L" && <ListMode bindList={bindList} pagingList={pagingList} />
       }
       {
-        // 1. 읽기 모드일 경우 상세보기 출력하기
+        // 2. 읽기 모드일 경우 상세보기 출력하기
         mode == "R" && <ReadMode selRecord={selRecord} />
+      }
+      {
+        // 3. 쓰기 모드일 경우 상세보기 출력하기
+        // sts 값은 문자열이므로 파싱하여 객체로 보냄
+        mode == "W" && <WriteMode sts={JSON.parse(sts)} />
       }
       <br />
       <table className="dtbl btngrp">
@@ -184,11 +258,22 @@ export default function Board() {
             <td>
               {
                 // 1. 글쓰기 버튼은 로그인한상태이고  L이면 출력
-                mode == "L" && <button onClick={clickButton}>Write</button>
+                mode == "L" && sts && (
+                  <button onClick={clickButton}>Write</button>
+                )
               }
               {
                 // 2. 글보기 "R" 상태일 경우
                 mode == "R" && <button onClick={clickButton}>List</button>
+              }
+              {
+                // 2. 글쓰기 "W" 상태일 경우
+                mode == "W" && (
+                  <>
+                    <button onClick={clickButton}>Submit</button>
+                    <button onClick={clickButton}>List</button>
+                  </>
+                )
               }
             </td>
           </tr>
@@ -248,7 +333,7 @@ const ReadMode = ({ selRecord }) => {
   // 읽기 모드가 호출되었다는 것은
   // 리스트의 제목이 클릭되었다는 것을 의미
   // 따라서 현재 레코드 값도 저장되었다는 의미
-  console.log("전달된 참조변수:", selRecord.current);
+  // console.log("전달된 참조변수:", selRecord.current);
   // 전달된 데이터 객체를 변수에 할당
   const data = selRecord.current;
 
@@ -302,3 +387,59 @@ const ReadMode = ({ selRecord }) => {
     </>
   );
 }; ///////// ReadMode////////
+
+// Write////////////////////////////////
+const WriteMode = ({ sts }) => {
+  // sts - 로그인 상태정보
+  return (
+    <>
+      <table className="dtblview readone">
+        <caption>OPINION : Write</caption>
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>
+              <input
+                type="text"
+                className="name"
+                size="20"
+                // 로그인한사람 이름
+                value={sts.unm}
+                readOnly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>
+              <input
+                type="text"
+                className="email"
+                size="40"
+                // 로그인한사람 이메일
+                value={sts.eml}
+                readOnly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Title</td>
+            <td>
+              <input type="text" className="subject" size="60" />
+            </td>
+          </tr>
+          <tr>
+            <td>Content</td>
+            <td>
+              <textarea className="content" cols="60" rows="10"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>Attachment</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+}; ///////// WriteMode////////

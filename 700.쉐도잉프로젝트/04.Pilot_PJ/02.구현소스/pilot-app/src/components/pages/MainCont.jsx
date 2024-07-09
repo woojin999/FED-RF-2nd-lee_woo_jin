@@ -11,7 +11,7 @@ function MainCont(props) {
 
   // 화면 랜더링 실행구역//
   useEffect(()=>{
-    console.log("useEffect");
+    // console.log("useEffect");
 
     // document / body / window 이 세가지는 
     // 이벤트를 등록하고 삭제할 수 있도록
@@ -29,7 +29,7 @@ function MainCont(props) {
 
     // 컴포넌트 소멸시 이벤트 삭제하기
     return(()=>{
-      console.log("메인 소멸");
+      // console.log("메인 소멸");
       // 1. 자동 휠함수 이벤트 삭제하기
       window.removeEventListener("wheel", wFn.wheelFn);
       // 2. 상단이동 이벤트 제거하기

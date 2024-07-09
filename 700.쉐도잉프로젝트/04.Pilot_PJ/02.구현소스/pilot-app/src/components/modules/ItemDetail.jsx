@@ -4,10 +4,13 @@ import { addComma } from "../../js/func/common_fn";
 import $ from "jquery";
 import { pCon } from "./pCon";
 
-function ItemDetail({ cat, ginfo, dt, setGinfo }) {
+function ItemDetail({ cat, ginfo, dt, setGinfo, gIdx }) {
   // cat - 카테고리
   // ginfo - 상품정보
-  console.log(cat, ginfo);
+  // dt - 상품데이터
+  // setGinfo - ginfo값 변경메서드
+  // gIdx - 상품고유번호
+  console.log(cat, ginfo, gIdx);
   // 전역 카트 사용여부값
 
   const myCon = useContext(pCon);
@@ -15,7 +18,7 @@ function ItemDetail({ cat, ginfo, dt, setGinfo }) {
   // 제이쿼리 이벤트 함수에 전달할 ginfo값 참조변수
   const getGinfo = useRef(ginfo);
   // getGinfo 참조변수는 새로 들어온 ginfo전달값이 달라진 경우 업데이트한다
-  if(getGinfo.current!=ginfo) getGinfo.current = ginfo;
+  if (getGinfo.current != ginfo) getGinfo.current = ginfo;
 
   // 배열 생성 테스트
   // 1. 배열 변수 = [] -> 배열리터럴;
@@ -70,10 +73,10 @@ function ItemDetail({ cat, ginfo, dt, setGinfo }) {
     }); // click
     // 제거 - numBtn.off("click",(e)=>{});
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     $("#sum").val(1);
-    $("#total").text(addComma(ginfo[3])+"원");
-  })
+    $("#total").text(addComma(ginfo[3]) + "원");
+  });
 
   return (
     <>
@@ -245,7 +248,35 @@ function ItemDetail({ cat, ginfo, dt, setGinfo }) {
             </div>
             <div>
               <button className="btn btn1">BUY NOW</button>
-              <button className="btn" onClick={()=>myCon.setCartSts(true)}>SHOPPING CART</button>
+              <button
+                className="btn"
+                onClick={() => {
+                  // 로컬스 없으면 만들어라
+                  if (!localStorage.getItem("cart-data")) {
+                    localStorage.setItem("cart-data", "[]");
+                  } // if ////
+
+                  // 로컬스 읽어와서 파싱하기
+                  let locals = localStorage.getItem("cart-data");
+                  locals = JSON.parse(locals);
+
+                  // 로컬스에 객체 데이터 추가하기
+                  locals.push({
+                    num: 1,
+                    idx: gIdx,
+                    cat: cat,
+                    ginfo: ginfo,
+                  });
+
+                  // 로컬스에 문자화하여 입력하기
+                  localStorage.setItem("cart-data",JSON.stringify(locals));
+
+                  // 카트 상태값 변경
+                  myCon.setCartSts(true);
+                }}
+              >
+                SHOPPING CART
+              </button>
               <button className="btn">WISH LIST</button>
             </div>
           </section>

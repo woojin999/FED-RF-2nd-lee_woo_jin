@@ -6,7 +6,7 @@ import ItemList from "../pages/ItemList";
 function MainArea({ page }) {
   // page 페이지 변경 문자값 전달
   // 5가지 값 : main / item-list / men / women / style
-  console.log("메인전달page:", page);
+  // console.log("메인전달page:", page);
 
   // 코드 리턴구역 /////////
   return (

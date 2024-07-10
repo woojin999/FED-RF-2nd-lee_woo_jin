@@ -14,10 +14,12 @@ import ItemDetail from "../modules/ItemDetail";
 
 function ItemList() {
   // 상태 변수 만들기
-  // [1] 카테고리정보
-  const [cat, setCat] = useState(itemListData[0].cat);
-  // [2] 상품정보
-  const [ginfo, setGinfo] = useState(itemListData[0].ginfo);
+  // 상품토탈정보
+  const [tot, setTot] = useState(itemListData[0]);
+  // // [1] 카테고리정보
+  // const [cat, setCat] = useState(itemListData[0].cat);
+  // // [2] 상품정보
+  // const [ginfo, setGinfo] = useState(itemListData[0].ginfo);
 
   // 상품고유번호 참조변수
   const gIdx = useRef(0);
@@ -48,11 +50,13 @@ function ItemList() {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  // 상품상세모듈 전달 상태변수 변경
-                  setCat(v.cat);
-                  setGinfo(v.ginfo);
-                  // 상품 고유번호 idx 업데이트
-                  gIdx.current = v.idx;
+                  // 상품 토탈정보 업데이트
+                  setTot(v);
+                  // // 상품상세모듈 전달 상태변수 변경
+                  // setCat(v.cat);
+                  // setGinfo(v.ginfo);
+                  // // 상품 고유번호 idx 업데이트
+                  // gIdx.current = v.idx;
                   // 상세상품정보 박스 보이기
                   $(".bgbx").show();
                   // console.log(v);
@@ -94,15 +98,13 @@ function ItemList() {
         cat 카테고리, ginfo 상품정보, dt-상품데이터, setGinfo - ginfo값 변경메서드
         */}
         <ItemDetail
-          // cat, ginfo는 개별상품정보
-          cat={cat}
-          ginfo={ginfo}
+          // 상품토탈정보
+          tot={tot}
           // dt 전체 데이터(한줄리스트때문)
           dt={itemListData}
           // setGinfo - 한줄리스트 클릭시 변경
-          setGinfo={setGinfo}
-          // 상품고유번호 전달
-          gIdx = {gIdx.current}
+          // setGinfo={setGinfo}
+          setTot={setTot}
         />
       </div>
     </main>

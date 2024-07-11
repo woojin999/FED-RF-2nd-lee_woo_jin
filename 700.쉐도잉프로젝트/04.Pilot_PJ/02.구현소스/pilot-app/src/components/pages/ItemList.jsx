@@ -16,6 +16,7 @@ function ItemList() {
   // 상태 변수 만들기
   // 상품토탈정보
   const [tot, setTot] = useState(itemListData[0]);
+  
   // // [1] 카테고리정보
   // const [cat, setCat] = useState(itemListData[0].cat);
   // // [2] 상품정보

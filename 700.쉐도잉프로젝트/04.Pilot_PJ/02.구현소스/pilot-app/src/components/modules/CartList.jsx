@@ -130,13 +130,13 @@ function CartList(props) {
                   >
                     <tbody>
                       {/* 카트데이터 연동파트
-            **************************
-              [데이터 구조정의]
-              1. idx : 상품고유번호
-              2. cat : 카테고리
-              3. ginfo : 상품정보
-              4. cnt : 상품개수
-            **************************
+                **************************
+                  [데이터 구조정의]
+                  1. idx : 상품고유번호
+                  2. cat : 카테고리
+                  3. ginfo : 상품정보
+                  4. cnt : 상품개수
+                **************************
             */}
                       {selData.map((v, i) => (
                         <tr key={i}>
@@ -162,13 +162,70 @@ function CartList(props) {
                                   type="text"
                                   className="item-cnt"
                                   readOnly
-                                  value={v.cnt}
-                                  onChange={() => {}}
+                                  defaultValue={v.cnt}
+                                  onBlur={() => {
+                                    console.log("ㅎㅎㅎ");
+                                  }}
                                 />
-                                <button className="btn-insert" data-idx="20">
+                                {/* 반영버튼 */}
+                                <button
+                                  className="btn-insert"
+                                  onClick={(e) => {
+                                    // 클릭시 실제 데이터 수량 변경하기
+                                    // 대상: selData -> 배열변환데이터
+                                    // i 는 배열순번임
+                                    selData[i].cnt = $(e.currentTarget)
+                                      .siblings(".item-cnt")
+                                      .val();
+                                    // 2. 데이터 문자화하기 : 변경된 원본을 문자화
+                                    let res = JSON.stringify(selData);
+
+                                    // 3.로컬스 "cart-data"반영하기
+                                    localStorage.setItem("cart-data", res);
+
+                                    // 4. 카트리스트 전역상태변수 변경
+                                    myCon.setLocalsCart(res);
+                                    // 5. 반영버튼 숨기기
+                                    $(e.currentTarget).css({width:"0"});
+
+                                    // 6. 전체 총합계 계산 다시하기
+                                    $(".total-num").text(addComma(totalFn()));
+                                  }}
+                                >
                                   반영
                                 </button>
-                                <b className="btn-cnt">
+                                <b
+                                  className="btn-cnt"
+                                  onClick={(e) => {
+                                    // 업데이트 대상(input박스)
+                                    let tg = $(e.currentTarget).siblings(
+                                      "input"
+                                    );
+
+                                    // 입력창의 blur이벤트 발생을 위해
+                                    // 강제로 포커스를 준다
+
+                                    // 하위 클릭된 이미지 종류 파악하기
+                                    // e.target으로 설정하여 하위요소인
+                                    // 이미지가 선택되게 해준다
+                                    // e.currentTarget은 이벤트가 걸린
+                                    // 요소 자신이다
+                                    let btnAlt = $(e.target).attr("alt");
+                                    if (btnAlt == "증가") {
+                                      // tg값을 읽어와서 1을 더한다
+                                      tg.val(Number(tg.val()) + 1);
+                                    } else if (
+                                      btnAlt == "감소" &&
+                                      tg.val() > 1
+                                    ) {
+                                      tg.val(Number(tg.val()) - 1);
+                                    }
+                                    // 클릭시 반영버튼 나타나기
+                                    $(e.currentTarget)
+                                      .siblings(".btn-insert")
+                                      .css({ width: "auto" });
+                                  }}
+                                >
                                   <img
                                     src={
                                       process.env.PUBLIC_URL +
@@ -205,11 +262,7 @@ function CartList(props) {
                               className="cfn"
                               onClick={() => {
                                 // confirm()의 "확인"클릭시 true
-                                if (
-                                  window.confirm(
-                                    "삭제하시겠습니가?"
-                                  )
-                                ) {
+                                if (window.confirm("삭제하시겠습니가?")) {
                                   // console.log("삭제함!!!");
                                   // console.log("현재객체:",selData);
                                   // console.log("지울순번:",i);

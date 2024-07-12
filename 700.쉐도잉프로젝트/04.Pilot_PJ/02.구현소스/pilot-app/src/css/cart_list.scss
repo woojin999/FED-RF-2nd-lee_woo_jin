@@ -136,12 +136,30 @@
   white-space: nowrap;
   padding: 0;
   overflow: hidden;
-  width: 0;
-  transition: .1s .1s;
-  /* display: none; */
+  // width: 0;
+  // transition: .1s .1s;
+  // border: none;
+  display: none;
+}
+.btn-cancel {
+  position: absolute;
+  margin-left: 74px;
+  white-space: nowrap;
+  padding: 0;
+  overflow: hidden;
+  // width: 0;
+  // transition: .1s .1s;
+  // border: none;
+  display: none;
 }
 /* 입력창에 포커스 갈때 다음형제요소 반영버튼 보이기 */
 .item-cnt:focus+.btn-insert{
+  /* outline: 10px dotted red; */
+  width: 34px;
+  transition: none;
+  /* display: inline-block; */
+}
+.item-cnt:focus+.btn-cancel{
   /* outline: 10px dotted red; */
   width: 34px;
   transition: none;

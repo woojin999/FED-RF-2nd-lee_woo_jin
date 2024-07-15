@@ -1,5 +1,5 @@
 // 보드페이지 컴포넌트 //
-import { Fragment, useContext, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 
 // 제이쿼리
 import $ from "jquery";
@@ -203,8 +203,13 @@ export default function Board() {
           return true;
         } //if//
       }); /// some ///
-      // 4. 로컬스에 업데이트하기 //////
+      // 3. 로컬스에 업데이트하기 //////
       localStorage.setItem("board-data", JSON.stringify(baseData));
+
+      // 4. 삭제후 리스트 리랜더링시 리스트 불일치로 인한 에러를 방지하기 위하여
+      // 전체 개수를 바로 업데이트한다
+      totalCount.current = baseData.length;
+
       // 5. 리스트로 돌아가기 /////
       // -> 모드변경! "L"
       setMode("L");
@@ -263,6 +268,10 @@ export default function Board() {
       // 3. 새배열을 문자화하여 로컬스에 넣기
       localStorage.setItem("board-data", JSON.stringify(locals));
 
+      // 4. 추가후 리스트 리랜더링시 리스트 불일치로 인한
+      // 에러를 방지하기 위하여 전체 개수를 바로 업데이트한다!
+      totalCount.current = baseData.length;
+
       // 리스트로 돌아가기 -> 모드 변경 "L"
       setMode("L");
     }
@@ -304,8 +313,12 @@ export default function Board() {
         }
       }); /// find 메서드
 
-      // 4. 로컬스에 업데이트하기
+      // 3. 로컬스에 업데이트하기
       localStorage.setItem("board-data", JSON.stringify(baseData));
+
+      // 4. 추가후 리스트 리랜더링시 리스트 불일치로 인한
+      // 에러를 방지하기 위하여 전체 개수를 바로 업데이트한다!
+      totalCount.current = baseData.length;
 
       // 5 리스트로 돌아가기 -> 모드 변경 "L"
       setMode("L");

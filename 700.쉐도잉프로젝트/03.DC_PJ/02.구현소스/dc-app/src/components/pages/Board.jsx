@@ -173,8 +173,44 @@ export default function Board() {
         // console.log("서브밋", mode);
         submitFn();
         break;
+      // 수정일 경우  수정보드로 변경
+      case "Modify":
+        setMode("M");
+        break;
+      // 삭제일경우 삭제함수 호출
+      case "Delete":
+        deleteFn();
+        break;
     }
   }; /////clickButton
+  // 삭제 처리함수
+  const deleteFn = () => {
+    // 삭제여부 확인
+    if (window.confirm("Are you sure you want to delete?")) {
+      // 1. 해당항목 idx담기
+
+      let currIdx = selRecord.current.idx;
+      // 2. some() 로 순회하여 해당항목 삭제하기
+      // find()와 달리 some()은 결과값을 boolean
+      // 리턴하여 처리한다 이것을 이용하여 코드처리
+      baseData.some((v, i) => {
+        if (v.idx == currIdx) {
+          // 해당순번 배열값을 삭제
+          // 배열삭제는 splice(순번,1)
+          baseData.splice(i, 1);
+
+          // 리턴true할 경우 종료
+          return true;
+        } //if//
+      }); /// some ///
+      // 4. 로컬스에 업데이트하기 //////
+      localStorage.setItem("board-data", JSON.stringify(baseData));
+      // 5. 리스트로 돌아가기 /////
+      // -> 모드변경! "L"
+      setMode("L");
+    } //if
+    // 1. 해당항목 idx담기
+  };
 
   // 서브밋 처리함수 /////
   const submitFn = () => {
@@ -200,7 +236,7 @@ export default function Board() {
 
       // 글번호 만들기
       // 전체 데이터중 idx만 모아서 배열만들기
-      let arrIdx = baseData.map(v=>parseInt(v.idx));
+      let arrIdx = baseData.map((v) => parseInt(v.idx));
       console.log(arrIdx);
       // 최대값 찾기 : 스프레드 연산자로 배열 값만 넣음
       let maxNum = Math.max(...arrIdx);
@@ -225,13 +261,55 @@ export default function Board() {
       // 2. 파싱배열에 push
       locals.push(data);
       // 3. 새배열을 문자화하여 로컬스에 넣기
-      localStorage.setItem("board-data",JSON.stringify(locals));
+      localStorage.setItem("board-data", JSON.stringify(locals));
 
       // 리스트로 돌아가기 -> 모드 변경 "L"
       setMode("L");
     }
 
     // 3. 수정모드 서브밋 (mode == "M")
+    else if (mode == "M") {
+      // 수정시 수정날짜 항목을 새로만들고 입력함
+      let today = new Date();
+      // yy-mm-dd 형식으로 구하기
+      // 제이슨 날짜형식 : toJSON()
+      // ISO 표준형식 : toISOString()
+      // 시간까지 나오므로 앞에 10자리만 가져감
+      // 문자열.substr(0,10)
+
+      // 2. 현재 데이터 idx값
+      let currIdx = selRecord.current.idx;
+
+      // 3. 기존데이터로 찾아서 변경 : 로컬스 데이터 -> baseData
+      // find()는 특정항목을 찾아서 리턴하여 데이터를 가져오기도 하지만
+      // 업데이트 등 작업도 가능
+      baseData.find((v) => {
+        console.log(v);
+        if (v.idx == currIdx) {
+          // 업데이트 작업하기
+          // 기존항목변경 : tit,cont
+          // 이미 선택된 selRecord 참조변수의 글번호인 idx로
+          // 원본 데이터를 조회하여 기존데이터를 업데이트한다
+          // 변경항목
+          // (1) 글제목 : tit
+          // (2) 글내용 : cont
+          // 추가항목(원래는 확정된 db스키마에 따라 입력해야하지만 우리가 사용하는 로컬스토리지의 확장성에 따라 필요한 항목을 추가하여 넣는다)
+          // (3) 수정일 : mdate
+          v.tit = title;
+          v.cont = cont;
+          // 새항목 추가 : mdate
+          v.mdate = today.toJSON().substr(0, 10);
+          // 해당항목을 만나면 끝
+          return true;
+        }
+      }); /// find 메서드
+
+      // 4. 로컬스에 업데이트하기
+      localStorage.setItem("board-data", JSON.stringify(baseData));
+
+      // 5 리스트로 돌아가기 -> 모드 변경 "L"
+      setMode("L");
+    }
   }; ////////////// submitFn //////
 
   // 코드 리턴구역 //
@@ -247,11 +325,17 @@ export default function Board() {
         mode == "R" && <ReadMode selRecord={selRecord} />
       }
       {
-        // 3. 쓰기 모드일 경우 상세보기 출력하기
+        // 3. 쓰기 모드일 경우 로그인정보 보내기
         // sts 값은 문자열이므로 파싱하여 객체로 보냄
         mode == "W" && <WriteMode sts={JSON.parse(sts)} />
       }
+      {
+        // 4. 수정 모드일 경우 상세보기 출력하기
+        // sts 값은 문자열이므로 파싱하여 객체로 보냄
+        mode == "M" && <ModifyMode selRecord={selRecord} />
+      }
       <br />
+      {/* 모드별 버튼출력 박스 */}
       <table className="dtbl btngrp">
         <tbody>
           <tr>
@@ -264,14 +348,39 @@ export default function Board() {
               }
               {
                 // 2. 글보기 "R" 상태일 경우
-                mode == "R" && <button onClick={clickButton}>List</button>
+                <>
+                  {mode == "R" && <button onClick={clickButton}>List</button>}
+
+                  {
+                    // 로그인한 상태이고 글쓴이와 일치할떄 수정보드 이동버튼이 노출됨
+                    // 현재글은 selRecord 참조변수에 저장됨
+                    // 글정보 항목중 uid가 사용자 아이디임
+                    // 로그인 상태정보하위의 sts.uid
+
+                    mode == "R" &&
+                      sts &&
+                      JSON.parse(sts).uid == selRecord.current.uid && (
+                        <button onClick={clickButton}>Modify</button>
+                      )
+                  }
+                </>
               }
               {
-                // 2. 글쓰기 "W" 상태일 경우
+                // 3. 글쓰기 "W" 상태일 경우
                 mode == "W" && (
                   <>
-                    <button onClick={clickButton}>Submit</button>
                     <button onClick={clickButton}>List</button>
+                    <button onClick={clickButton}>Submit</button>
+                  </>
+                )
+              }
+              {
+                // 4. 수정상태 "M" 상태일 경우
+                mode == "M" && (
+                  <>
+                    <button onClick={clickButton}>List</button>
+                    <button onClick={clickButton}>Submit</button>
+                    <button onClick={clickButton}>Delete</button>
                   </>
                 )
               }
@@ -443,3 +552,64 @@ const WriteMode = ({ sts }) => {
     </>
   );
 }; ///////// WriteMode////////
+
+/******************************* 
+  수정 모드 서브 컴포넌트
+*******************************/
+
+const ModifyMode = ({ selRecord }) => {
+  // 읽기 모드가 호출되었다는 것은
+  // 리스트의 제목이 클릭되었다는 것을 의미
+  // 따라서 현재 레코드 값도 저장되었다는 의미
+  // console.log("전달된 참조변수:", selRecord.current);
+  // 전달된 데이터 객체를 변수에 할당
+  const data = selRecord.current;
+
+  return (
+    <>
+      <table className="dtblview readone">
+        <caption>OPINION : Modify</caption>
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>
+              <input
+                type="text"
+                className="name"
+                size="20"
+                value={data.unm}
+                readOnly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Title</td>
+            <td>
+              <input
+                type="text"
+                className="subject"
+                size="60"
+                defaultValue={data.tit}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Content</td>
+            <td>
+              <textarea
+                className="content"
+                cols="60"
+                rows="10"
+                defaultValue={data.cont}
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>Attachment</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+}; ///////// ModifyMode////////

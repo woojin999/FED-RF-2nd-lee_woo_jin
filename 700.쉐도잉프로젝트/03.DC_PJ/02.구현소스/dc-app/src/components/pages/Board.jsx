@@ -49,6 +49,10 @@ export default function Board() {
   // (3) 글쓰기 모드(W) : Write Mode
   // (4) 수정 모드(M) : Modify Mode (삭제포함)
 
+  // [3] 검색어 저장변수
+  const [keyword, setKeyword] = useState(["", ""]);
+  console.log("[기준,키워드]", keyword);
+
   // [ 참조변수 ] ///
   // [1] 전체 개수 - 매번 계산하지 않도록 참조변수로!
   const totalCount = useRef(baseData.length);
@@ -73,7 +77,26 @@ export default function Board() {
     // console.log(baseData);
 
     // 1. 전체 원본데이터 선택
-    let orgData = baseData;
+    let orgData;
+
+    // 검색어가 있는경우 필터하기
+    // keyword[0] : 검색기준 / keyword[1] : 검색어
+    if (keyword[1] != "") {
+      orgData = baseData.filter((v) => {
+        // 검색원본데이터
+        let orgTxt = v[keyword[0]].toLowerCase();
+        // 검색어 데이터
+        let txt = keyword[1].toLowerCase();
+        // console.log(v[keyword[0]].indexOf(keyword[1]));
+        if (orgTxt.indexOf(txt) != -1) return true;
+      });
+    } /// if /////
+    // 1-2 검색어가 없는경우 전체넣기
+    else {
+      orgData = baseData;
+    } /// else ///
+
+    totalCount.current = orgData.length;
 
     // 2. 정렬 적용하기 : 내림차순
     orgData.sort((a, b) =>
@@ -103,33 +126,45 @@ export default function Board() {
       selData.push(orgData[i]);
     } ///// for //////
 
-    console.log("일부데이터:", selData);
-    console.log("여기:", selData.length);
-    if (selData.length == 0) setPageNum(pageNum - 1);
+    // console.log("일부데이터:", selData);
+    // console.log("여기:", selData.length);
 
-    return selData.map((v, i) => (
-      <tr key={i}>
-        {/* 시작번호를 더하여 페이지별 순번을 변경 */}
-        <td>{i + 1 + sNum}</td>
-        <td>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              // 읽기모드로 변경!
-              setMode("R");
-              // 해당 데이터 저장하기
-              selRecord.current = v;
-            }}
-          >
-            {v.tit}
-          </a>
-        </td>
-        <td>{v.unm}</td>
-        <td>{v.date}</td>
-        <td>{v.cnt}</td>
-      </tr>
-    ));
+    // if (selData.length == 0) setPageNum(pageNum - 1);
+    // listmode 컴포넌트가 업데이트 되는동안에 리스트 관련 상태변수를 업데이트하면 업데이트 불가 에러 메시지가 발생 따라서 이런 코드는 다른 방식으로 변경해야함
+
+    return (
+      // 전체 데이터 개수가 0 초과일 경우 출력
+      // 0초과 ? map 돌기 코드 : 없음 코드
+      totalCount.current > 0 ? (
+        selData.map((v, i) => (
+          <tr key={i}>
+            {/* 시작번호를 더하여 페이지별 순번을 변경 */}
+            <td>{i + 1 + sNum}</td>
+            <td>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // 읽기모드로 변경!
+                  setMode("R");
+                  // 해당 데이터 저장하기
+                  selRecord.current = v;
+                }}
+              >
+                {v.tit}
+              </a>
+            </td>
+            <td>{v.unm}</td>
+            <td>{v.date}</td>
+            <td>{v.cnt}</td>
+          </tr>
+        ))
+      ) : ( // 데이터가 없을 때 출력
+        <tr>
+          <td colSpan="5">There is no data.</td>
+        </tr>
+      )
+    );
   }; /////////// bindList 함수 /////////////////
 
   // 버튼 클릭시 변경함수 ////////
@@ -146,6 +181,7 @@ export default function Board() {
       // 리스트모드로 변경
       case "List":
         setMode("L");
+        setKeyword(['','']);
         break;
       // 서브밋일 경우 함수호출!
       case "Submit":
@@ -339,6 +375,7 @@ export default function Board() {
             unitSize={unitSize}
             pgPgNum={pgPgNum}
             pgPgSize={pgPgSize}
+            setKeyword={setKeyword}
           />
         )
       }
@@ -431,6 +468,7 @@ const ListMode = ({
   unitSize,
   pgPgNum,
   pgPgSize,
+  setKeyword,
 }) => {
   /***************************************** 
     [ 전달변수 ] - 2~5까지 4개는 페이징 전달변수
@@ -453,7 +491,32 @@ const ListMode = ({
           <option value="1">Ascending</option>
         </select>
         <input id="stxt" type="text" maxLength="50" />
-        <button className="sbtn">Search</button>
+        <button
+          className="sbtn"
+          onClick={(e) => {
+            // 검색기준값 읽어오기
+            let creteria = $(e.target).siblings(".cta").val();
+            console.log("기준값", creteria);
+            // 검색어 읽어오기
+            let txt = $(e.target).prev().val();
+            console.log(typeof txt, txt);
+            // input값은 안쓰면 빈스트링이 넘어온다
+            if (txt != "") {
+              console.log("검색해");
+              // [검색기준,검색어] -> setKeyword 업데이트
+              setKeyword([creteria, txt]);
+              // 검색후엔 첫페이지로 보내기
+              setPageNum(1);
+              // 검색후에 페이지의 페이징 번호 초기화 (1)
+              pgPgNum.current= 1;
+            } else {
+              // 빈값일 경우
+              alert("Please enter a keyword");
+            }
+          }}
+        >
+          Search
+        </button>
       </div>
       <table className="dtbl" id="board">
         <thead>
@@ -470,6 +533,8 @@ const ListMode = ({
           <tr>
             <td colSpan="5" className="paging">
               {
+                // 데이터 개수가 0이상일떄만 출력
+                totalCount.current > 0 &&
                 <PagingList
                   pageNum={pageNum}
                   setPageNum={setPageNum}
@@ -793,14 +858,14 @@ const PagingList = ({
     pgPgCount++;
   } //if //
 
-  console.log("페이징의 페이징개수:", pgPgCount);
+  // console.log("페이징의 페이징개수:", pgPgCount);
 
   // (2) 리스트 시작값 / 한계값 구하기
   // 시작값 : (페이지페이징 넘버-1) * 페이지페이징 단위
   let initNum = (pgPgNum.current - 1) * pgPgSize;
   // 한계값 : 페페넘 * 페페단
   let limitNum = pgPgNum.current * pgPgSize;
-  console.log("시작값:", initNum, "/한계값:", limitNum);
+  // console.log("시작값:", initNum, "/한계값:", limitNum);
 
   // [링크코드 만들기] ///
   const pgCode = [];
@@ -936,7 +1001,7 @@ const PagingList = ({
     // (2) 끝 페이징이동은
     // 오른쪽일 경우 맨 끝 페이징번호로 이동(pgPgCount)
     // 왼쪽(-1)일 경우 맨 앞 페이징번호로 이동(1)
-    else newPgPgNum = dir ==1 ? pgPgCount:1;
+    else newPgPgNum = dir == 1 ? pgPgCount : 1;
 
     // 페이징의 페이징 번호 업데이트하기
     pgPgNum.current = newPgPgNum;

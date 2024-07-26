@@ -53,6 +53,14 @@ export default function Board() {
   const [keyword, setKeyword] = useState(["", ""]);
   console.log("[기준,키워드]", keyword);
 
+  // [4] 정렬 기준값 상태변수 : 값 (asc = -1) / desc = 1)
+  const [sort, setSort] = useState(1);
+  // 기존셋팅값에 1을 곱하면 원래값, -1 곱하면 반대값셋팅
+
+  // [5] 정렬 항목값 상태변수 : 값 -idx / tit
+  const [sortCta, setSortCta] = useState("idx");
+  // 기존셋팅값에 1을 곱하면 원래값, -1 곱하면 반대값셋팅
+
   // [ 참조변수 ] ///
   // [1] 전체 개수 - 매번 계산하지 않도록 참조변수로!
   const totalCount = useRef(baseData.length);
@@ -98,9 +106,20 @@ export default function Board() {
 
     totalCount.current = orgData.length;
 
+    // 내림차순 / 오름차순 셋팅값 변수
+    // let sortSet = { desc: [-1, 1], asc: [1, -1] };
+    // console.log("정렬셋:",sortSet[sort]);
     // 2. 정렬 적용하기 : 내림차순
+    // sort값이 -1이면 desc(현재상태유지)
+    // sort값이  -1이면 asc(부호반대변경)
+    // 정렬항목은 sortCta값에 따름("idx"/"tit")
+
+    // "idx" 정렬항목일경우만 Number()처리함수
+    const chgVal = (x) =>
+      sortCta == "idx" ? Number(x[sortCta]) : x[sortCta].toLowerCase();
+
     orgData.sort((a, b) =>
-      Number(a.idx) > Number(b.idx) ? -1 : Number(a.idx) < Number(b.idx) ? 1 : 0
+      chgVal(a) > chgVal(b) ? -1 * sort : chgVal(a) < chgVal(b) ? 1 * sort : 0
     );
 
     // 3. 일부 데이터만 선택
@@ -159,7 +178,8 @@ export default function Board() {
             <td>{v.cnt}</td>
           </tr>
         ))
-      ) : ( // 데이터가 없을 때 출력
+      ) : (
+        // 데이터가 없을 때 출력
         <tr>
           <td colSpan="5">There is no data.</td>
         </tr>
@@ -181,7 +201,7 @@ export default function Board() {
       // 리스트모드로 변경
       case "List":
         setMode("L");
-        setKeyword(['','']);
+        setKeyword(["", ""]);
         break;
       // 서브밋일 경우 함수호출!
       case "Submit":
@@ -376,6 +396,11 @@ export default function Board() {
             pgPgNum={pgPgNum}
             pgPgSize={pgPgSize}
             setKeyword={setKeyword}
+            keyword={keyword}
+            setSort={setSort}
+            sort={sort}
+            sortCta={sortCta}
+            setSortCta={setSortCta}
           />
         )
       }
@@ -469,6 +494,11 @@ const ListMode = ({
   pgPgNum,
   pgPgSize,
   setKeyword,
+  keyword,
+  sort,
+  setSort,
+  sortCta,
+  setSortCta,
 }) => {
   /***************************************** 
     [ 전달변수 ] - 2~5까지 4개는 페이징 전달변수
@@ -486,11 +516,29 @@ const ListMode = ({
           <option value="cont">Contents</option>
           <option value="unm">Writer</option>
         </select>
-        <select name="sel" id="sel" className="sel">
-          <option value="0">Descending</option>
-          <option value="1">Ascending</option>
+        <select
+          name="sel"
+          id="sel"
+          className="sel"
+          onChange={() => setSort(sort * -1)}
+        >
+          <option value="0" selected={sort == 1 ? true : false}>
+            Descending
+          </option>
+          <option value="1" selected={sort == -1 ? true : false}>
+            Ascending
+          </option>
         </select>
-        <input id="stxt" type="text" maxLength="50" />
+        <input
+          id="stxt"
+          type="text"
+          maxLength="50"
+          onKeyUp={(e) => {
+            if (e.key == "Enter") {
+              $(e.currentTarget).next().trigger("click");
+            }
+          }}
+        />
         <button
           className="sbtn"
           onClick={(e) => {
@@ -508,7 +556,7 @@ const ListMode = ({
               // 검색후엔 첫페이지로 보내기
               setPageNum(1);
               // 검색후에 페이지의 페이징 번호 초기화 (1)
-              pgPgNum.current= 1;
+              pgPgNum.current = 1;
             } else {
               // 빈값일 경우
               alert("Please enter a keyword");
@@ -517,6 +565,44 @@ const ListMode = ({
         >
           Search
         </button>
+        {
+          // 키워드가 있는 경우에 전체 리스트 돌아가기 버튼 출력
+          keyword[0] !== "" && (
+            <button
+              className="back-total-list"
+              onClick={(e) => {
+                // 검색어 초기화
+                setKeyword(["", ""]);
+                // 검색어삭제
+                $(e.currentTarget).siblings("#stxt").val('');
+                // 검색항목초기화
+                $(e.currentTarget).siblings("#cta").val("tit");
+                // 정렬 초기화
+                setSort(1);
+                // 정렬항목 초기화
+                setSortCta("idx");
+                // 첫페이지번호 변경
+                setPageNum(1);
+              }}
+            >
+              Back to total list
+            </button>
+          )
+        }
+        <select
+          name="sort_cta"
+          id="sort_cta"
+          className="sort_cta"
+          onChange={(e) => setSortCta(e.currentTarget.value)}
+          style={{ float: "right" }}
+        >
+          <option value="idx" selected={sortCta == "idx" ? true : false}>
+            Recent
+          </option>
+          <option value="tit" selected={sortCta == "tit" ? true : false}>
+            Title
+          </option>
+        </select>
       </div>
       <table className="dtbl" id="board">
         <thead>
@@ -534,15 +620,16 @@ const ListMode = ({
             <td colSpan="5" className="paging">
               {
                 // 데이터 개수가 0이상일떄만 출력
-                totalCount.current > 0 &&
-                <PagingList
-                  pageNum={pageNum}
-                  setPageNum={setPageNum}
-                  totalCount={totalCount}
-                  unitSize={unitSize}
-                  pgPgNum={pgPgNum}
-                  pgPgSize={pgPgSize}
-                />
+                totalCount.current > 0 && (
+                  <PagingList
+                    pageNum={pageNum}
+                    setPageNum={setPageNum}
+                    totalCount={totalCount}
+                    unitSize={unitSize}
+                    pgPgNum={pgPgNum}
+                    pgPgSize={pgPgSize}
+                  />
+                )
               }
             </td>
           </tr>

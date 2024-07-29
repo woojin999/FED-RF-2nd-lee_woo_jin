@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  HashRouter,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Layout from "./components/layout/layout";
 import Main from "./components/pages/Main";
 import Character from "./components/pages/Character";
@@ -59,7 +65,9 @@ export default function MainComponent() {
   return (
     // 라우터 루트로 라우터 구성시작
     // basename 속성은 package.json의 "homepage" 속성값을 읽어옴(읽는 방법은 process.env.PUBLIC_URL)
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    // <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter>
+      {/* basename 속성을 쓰지 않는다. 해쉬라우터는 homepage 속성값을 자동으로 연결해준다 */}
       {/* 라우터 경로 변경시 최상단이동 컴포넌트 */}
       <ScrollTop />
       <Routes>
@@ -70,7 +78,7 @@ export default function MainComponent() {
           {/* 하위 라우트 셋팅 
         -> path설정대신 index키워드를 쓰면 
         첫페이지로 구성됨 -> MainArea 컴포넌트 <Outlet/>에
-        출력된다!*/}
+      출력된다!*/}
           <Route index element={<Main />} />
           <Route path="character" element={<Character />} />
           <Route path="comics" element={<Comics />} />
@@ -82,12 +90,13 @@ export default function MainComponent() {
           <Route path="board" element={<Board />} />
           <Route path="detail" element={<CatDetail />} />
           <Route path="search" element={<SearchPage />} />
-          <Route path="member" element={<Member/>}/>
-          <Route path="login" element={<Login />}/>
+          <Route path="member" element={<Member />} />
+          <Route path="login" element={<Login />} />
         </Route>
         {/* Layout 루트 Route로 하위 Route를 감싼다! */}
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
+    // </BrowserRouter>
   );
 }
 
@@ -95,14 +104,13 @@ export default function MainComponent() {
   컴포넌트로 만들고 라우터 안에 넣고 라우터 경로 변경시 스크롤 최상단 이동
 ********************************************/
 const ScrollTop = () => {
-
   // 라우터 경로 변경시 path값 읽어오기
   // pathname 객체 속성에 담긴다
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   // 화면랜더링 구역에 스크롤 상단이동 코드넣기
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     // 변경된 라우터 경로값 확인
     // console.log("라우터경로:",pathname);
   }, [pathname]);

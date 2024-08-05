@@ -105,30 +105,29 @@ export default function Board() {
     // 2. key값에 따라 분기하기
     switch (key) {
       // (1) 검색일 경우 실행코드
-      case "search":
-        {
-          // 검색기준값 읽어오기
-          let creteria = $(ele).siblings(".cta").val();
-          console.log("기준값", creteria);
-          // 검색어 읽어오기
-          let txt = $(ele).prev().val();
-          console.log(typeof txt, txt);
-          // input값은 안쓰면 빈스트링이 넘어온다
-          if (txt != "") {
-            console.log("검색해");
-            // [검색기준,검색어] -> setKeyword 업데이트
-            setKeyword([creteria, txt]);
-            // 검색후엔 첫페이지로 보내기
-            setPageNum(1);
-            // 검색후에 페이지의 페이징 번호 초기화 (1)
-            pgPgNum.current = 1;
-          } else {
-            // 빈값일 경우
-            alert("Please enter a keyword");
-          }
-          // 리턴 코드값은 리듀서 변수에 할당
-          return gval+"*"+txt;
+      case "search": {
+        // 검색기준값 읽어오기
+        let creteria = $(ele).siblings(".cta").val();
+        console.log("기준값", creteria);
+        // 검색어 읽어오기
+        let txt = $(ele).prev().val();
+        console.log(typeof txt, txt);
+        // input값은 안쓰면 빈스트링이 넘어온다
+        if (txt != "") {
+          console.log("검색해");
+          // [검색기준,검색어] -> setKeyword 업데이트
+          setKeyword([creteria, txt]);
+          // 검색후엔 첫페이지로 보내기
+          setPageNum(1);
+          // 검색후에 페이지의 페이징 번호 초기화 (1)
+          pgPgNum.current = 1;
+        } else {
+          // 빈값일 경우
+          alert("Please enter a keyword");
         }
+        // 리턴 코드값은 리듀서 변수에 할당
+        return gval + "*" + txt;
+      }
       // (2) 전체리스트 돌아가기 실행코드
       case "back":
         {
@@ -152,7 +151,7 @@ export default function Board() {
   };
 
   // 검색기능 지원 후크 리듀서 : useReducer
-  const [memory, dispach] = useReducer(reducerFn, '');
+  const [memory, dispach] = useReducer(reducerFn, "");
 
   /*********************************************** 
      * [ 리듀서 후크 : useReducer ]
@@ -737,7 +736,15 @@ const ListMode = ({
           <option defaultValue="idx">Recent</option>
           <option defaultValue="tit">Title</option>
         </select>
-        <b>{memory}</b>
+        <button style={{ position: "relative" }}>History</button>
+        <b style={{ position: "absolute", lineHeight: "1.7" }}>
+          {memory.indexOf("*") !== -1 &&
+            memory.split("*").map((v) => (
+              <div>
+                <a>{v}</a>
+              </div>
+            ))}
+        </b>
       </div>
       <table className="dtbl" id="board">
         <thead>

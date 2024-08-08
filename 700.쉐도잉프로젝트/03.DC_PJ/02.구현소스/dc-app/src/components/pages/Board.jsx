@@ -129,11 +129,15 @@ export default function Board() {
         // return gval + "*" + txt;
         return (
           // *이 있으면 split으로 잘라서 배열로 만들고 배열값중 현재 입력된 txt가
-          // 배열중에 없으면 새로 등록하고  있으면 등록하지 않는다를 코드로 작성 
+          // 배열중에 없으면 새로 등록하고  있으면 등록하지 않는다를 코드로 작성
           // 등록하지않는다는 gval만 넣으면 된다
           // (gval.indexOf("*")!=-1&&gval)?
-          gval + (gval !=""?"*":"") + txt
-          );
+          gval.indexOf("*") !== -1
+            ? gval.split("*").includes(txt)
+              ? gval
+              : gval + (gval != "" ? "*" : "") + txt
+            : gval + (gval != "" ? "*" : "") + txt
+        );
       }
       // (2) 전체리스트 돌아가기 실행코드
       case "back":
@@ -176,7 +180,11 @@ export default function Board() {
           alert("Please enter a keyword");
         }
         // 리턴 코드값은 리듀서 변수에 할당
-        return gval + "*" + txt;
+        return gval.indexOf("*") !== -1
+          ? gval.split("*").includes(txt)
+            ? gval
+            : gval + (gval != "" ? "*" : "") + txt
+          : gval + (gval != "" ? "*" : "") + txt;
       }
       default:
         break;
@@ -769,16 +777,33 @@ const ListMode = ({
           <option defaultValue="idx">Recent</option>
           <option defaultValue="tit">Title</option>
         </select>
-        <button style={{ position: "relative" }}>History</button>
+        <button style={{ position: "relative" }}>
+          History
+          <ol
+            style={{
+              position: "absolute",
+              lineHeight: "1.7",
+              padding: "5px 15px",
+              border: "1px solid gray",
+              borderRadius: "10px",
+              backgroundColor: "#f8f8ffcc",
+              display: "none",
+            }}
+          ></ol>
+        </button>
         <ol style={{ position: "absolute", lineHeight: "1.7" }}>
           {memory.indexOf("*") !== -1 &&
             memory.split("*").map((v) => (
               <li>
-                <b onClick={(e)=>{
-                  // 리듀서 메서드 호출
-                  dispach({ type: ["again", e.target] });
-                  // 보낼값구성 : [ 구분문자열, 이벤트 발생요소 ]
-                }}>{v}</b>
+                <b
+                  onClick={(e) => {
+                    // 리듀서 메서드 호출
+                    dispach({ type: ["again", e.target] });
+                    // 보낼값구성 : [ 구분문자열, 이벤트 발생요소 ]
+                  }}
+                >
+                  {v}
+                </b>
               </li>
             ))}
         </ol>

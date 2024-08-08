@@ -130,7 +130,7 @@ export default function Board() {
         return (
           // *이 있으면 split으로 잘라서 배열로 만들고 배열값중 현재 입력된 txt가
           // 배열중에 없으면 새로 등록하고  있으면 등록하지 않는다를 코드로 작성 
-          // 등록않는다는 gval만 넣으면 된다
+          // 등록하지않는다는 gval만 넣으면 된다
           // (gval.indexOf("*")!=-1&&gval)?
           gval + (gval !=""?"*":"") + txt
           );

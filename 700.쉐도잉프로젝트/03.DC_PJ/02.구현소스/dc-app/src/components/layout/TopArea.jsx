@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 // import { dCon } from "../modules/dCon";
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect } from "react";
 
 // 메모이제이션 적용하기! /////
 // -> 그.러.나... 단순히 적용하면 효과가 없음!
@@ -83,6 +83,20 @@ export const TopArea = memo(({ loginMsg, loginSts, logoutFn, goPage }) => {
     // 네이게이트메서드(라우터주소,{state:{보낼객체}})
     goPage("search", { state: { keyword: txt } });
   }; /// goSearch ///
+
+  // 햄버거용 함수 : 전체메뉴 보이기
+  const showMenu = () => $(".top-area").toggleClass("on");
+
+  // 랜더링후 실행구역 ///////////////
+  useEffect(() => {
+    // GNB a요소 클릭시 전체메뉴 닫기
+    // 대상: .gnb a[href!='#']
+    // -> href가 '#'이 아닌 gnb 하위 모든 a요소
+    // -> != 은 제이쿼리전용!
+    $(".gnb a[href!='#']").on("click", () => {
+      $(".top-area").removeClass("on");
+    }); /////////// click //////////
+  }); ///////// useEffect /////////
 
   //코드리턴구역
   return (
@@ -211,6 +225,8 @@ export const TopArea = memo(({ loginMsg, loginSts, logoutFn, goPage }) => {
             }
           </ul>
         </nav>
+        {/* 모바일용 햄버거 버튼 */}
+        <button className="hambtn" onClick={showMenu}></button>
       </header>
     </>
   );
